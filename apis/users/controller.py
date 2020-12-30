@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Header, Request
 from core.db import get_db
 from models.user.models import User
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from schema.user import UserBase, NewUser, AllUser, ModifyUser
 import jwt
 from core.config import settings
@@ -53,9 +54,8 @@ def all_users(page_no: int, page_size: int, search_username: str = '', db: Sessi
 
 @user_router.put("/create_user", responses={406: {"description": "创建的用户已经存在"}}, name="创建新用户")
 def create_user(user: NewUser, request: Request, operator: Optional[str] = Header(None), db: Session = Depends(get_db)):
-    old_user = db.query(User).filter(User.username == user.username).first()
-    old_email = db.query(User).filter(User.email == user.email).first()
-    if old_user or old_email:
+    old_user = db.query(User).filter(or_(User.username == user.username, User.email == user.email)).first()
+    if old_user:
         raise HTTPException(status_code=406, detail="创建的用户已经存在")
     user_dict = {"username": user.username, "email": user.email, "nick_name": user.nick_name,
                  "is_active": user.is_active}

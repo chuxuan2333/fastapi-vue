@@ -8,7 +8,7 @@ class Role(Base):
     __tablename__ = "role"
     __table_args__ = ({"comment": "角色表"})
     role_id = Column(BigInteger, primary_key=True, default=generate_id, index=True, doc="id")
-    role_name = Column(String(20), nullable=False, doc="角色名称")
+    role_name = Column(String(20), nullable=False, unique=True, doc="角色名称")
     role_desc = Column(String(100), doc="描述")
     creat_time = Column(DateTime(), default=datetime.now, comment="创建时间")
     update_time = Column(DateTime(), default=datetime.now, onupdate=datetime.now, comment="最后一次更新时间")
