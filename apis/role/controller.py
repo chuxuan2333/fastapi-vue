@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from core.db import get_session
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from models.role.models import Role, RoleUserRelation
 from models.user.models import User
@@ -10,8 +11,12 @@ role_router = APIRouter()
 
 @role_router.get("/list", response_model=RoleList, name="获取角色列表")
 async def role_list(db: Session = Depends(get_session)):
-    roles = db.query(Role).all()
-    role_lists = {"roles": [RoleBase(**{"role_name": role.role_name, "role_desc": role.role_desc}) for role in roles]}
+    roles = db.query(Role, func.count(RoleUserRelation.user_id).label('user_count')).outerjoin(
+        RoleUserRelation,
+        RoleUserRelation.role_id == Role.role_id).group_by(Role.role_name).all()
+    role_lists = {"roles": [
+        RoleBase(**{"role_name": role.Role.role_name, "role_desc": role.Role.role_desc, "role_id": role.Role.role_id,
+                    "user_count": role.user_count}) for role in roles]}
     return role_lists
 
 
@@ -19,8 +24,8 @@ async def role_list(db: Session = Depends(get_session)):
 async def add_role(role: RoleBase, db: Session = Depends(get_session)):
     old_role = db.query(Role).filter(Role.role_name == role.role_name).first()
     if old_role:
-        return HTTPException(status_code=406, detail="创建的角色已存在")
-    new_role = Role(**role.dict())
+        raise HTTPException(status_code=406, detail="创建的角色已存在")
+    new_role = Role(role_name=role.role_name, role_desc=role.role_desc)
     db.add(new_role)
     db.commit()
     return {"message": "角色添加成功"}
@@ -32,7 +37,7 @@ async def role_add_user(role_users: RoleAddUsers, db: Session = Depends(get_sess
     # 判断role是否存在
     role = db.query(Role.role_id == role_id).first()
     if not role:
-        return HTTPException(status_code=406, detail="角色不存在")
+        raise HTTPException(status_code=406, detail="角色不存在")
     # todo 此处是否要判断user_id是否正确？
     # 处理关联表
     # 清除所有数据
@@ -50,8 +55,8 @@ async def role_add_user(role_users: RoleAddUsers, db: Session = Depends(get_sess
 @role_router.get("/user_lists", response_model=RoleUsers, name="角色下所有成员")
 async def role_user_lists(role_id: str, db: Session = Depends(get_session)):
     # 通过role去查询所有用户
-    users = db.query(User.user_id, User.username).join(RoleUserRelation,
-                                                       RoleUserRelation.user_id == User.user_id).filter(
+    users = db.query(User.user_id).join(RoleUserRelation, RoleUserRelation.user_id == User.user_id).filter(
         RoleUserRelation.role_id == int(role_id)).all()
-    role_users = [{"user_id": str(user.user_id), "username": user.username} for user in users]
-    return RoleUsers(users=role_users)
+    all_users = db.query(User).all()
+    role_users = [{"key": str(user.user_id), "label": user.username} for user in all_users]
+    return RoleUsers(users=role_users, choose_users=[str(member.user_id) for member in users])

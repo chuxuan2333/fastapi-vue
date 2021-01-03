@@ -89,6 +89,17 @@ export const asyncRoutes = [
         hidden: true
       },
       {
+        path: 'roles',
+        component: () => import('@/views/role/roleList'),
+        meta: { title: '角色管理', icon: 'peoples', menu: 'role-manage' }
+      },
+      {
+        path: '/role/edit/:id',
+        component: () => import('@/views/role/roleEdit'),
+        hidden: true,
+        meta: { title: '角色编辑', menu: 'role-edit' }
+      },
+      {
         path: 'records',
         component: () => import('@/views/record/recordList'),
         meta: { title: '操作记录', icon: 'el-icon-postcard', menu: 'record-manage' }

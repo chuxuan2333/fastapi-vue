@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Header, Request
 from core.db import get_db
 from models.user.models import User
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from schema.user import UserBase, NewUser, AllUser, ModifyUser
 import jwt
 from core.config import settings
@@ -20,7 +20,8 @@ def me(authorization: Optional[str] = Header(None), db: Session = Depends(get_db
     username: str = payload.get("sub")
     user = db.query(User).filter(User.username == username).first()
     user_dict = {"username": user.username, "email": user.email, "is_active": user.is_active,
-                 "nick_name": user.nick_name, "menus": ["system-manage", "user-manage", "record-manage", "user-add"]}
+                 "nick_name": user.nick_name,
+                 "menus": ["system-manage", "user-manage", "record-manage", "user-add", "role-manage","role-edit"]}
     return UserBase(**user_dict)
 
 
@@ -40,11 +41,12 @@ def all_users(page_no: int, page_size: int, search_username: str = '', db: Sessi
     # 分页查询,前端需要传递页数,和每页多少个
     # 数据分页与list切片格式保持一致
     if search_username:
-        total = db.query(User).filter(User.username == search_username).count()
+        total = db.query(func.count(User.user_id)).filter(User.username == search_username).scalar()
         users = db.query(User).filter(User.username == search_username).slice(page_size * (page_no - 1),
                                                                               page_size * page_no)
     else:
-        total = db.query(User).count()
+        total = db.query(func.count(User.user_id)).scalar()
+        print(total)
         users = db.query(User).slice(page_size * (page_no - 1), page_size * page_no)
     all_users_dict = {"total": total, "users": [UserBase(
         **{"username": user.username, "email": user.email, "is_active": user.is_active, "nick_name": user.nick_name})

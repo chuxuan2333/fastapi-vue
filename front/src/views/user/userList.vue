@@ -20,16 +20,17 @@
         label="状态"
         :filters="[{ text: '已激活', value: '已激活' }, { text: '未激活', value: '未激活' }]"
         :filter-method="filterTag"
-        filter-placement="bottom-end">
+        filter-placement="bottom-end"
+      >
         <template slot-scope="scope">
           <el-tag
             :type="scope.row.is_active === true ? 'primary' : 'danger'"
             disable-transitions>{{ scope.row.is_active===true ? '已激活':'未激活' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" @click="editUser(scope.row)" circle></el-button>
+          <el-button type="primary" icon="el-icon-edit" circle @click="editUser(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
@@ -45,8 +46,7 @@
         :total="pagination.total"
         @current-change="handlePageChange"
         @size-change="handleSizeChange"
-      >
-      </el-pagination>
+      />
     </div>
     <el-dialog title="修改用户" :visible.sync="dialogFormVisible">
       <el-form ref="userForm" :model="user" :rules="editRules">
