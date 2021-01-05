@@ -13,8 +13,8 @@ class RoleList(BaseModel):
     roles: List[RoleBase] = []
 
 
-class RoleAddUsers(BaseModel):
-    # 添加成员模型
+class RoleEditUsers(BaseModel):
+    # 修改成员模型
     role_id: str
     users: List[str]
 
@@ -30,3 +30,32 @@ class RoleUsers(BaseModel):
     users: List[RoleUser]
     # role下面的用户id list
     choose_users: List[str]
+
+
+class PermBase(BaseModel):
+    # 权限基础模型
+    perm_id: Optional[str] = None
+    perm_name: str
+    perm_interface: str
+
+
+class PermList(BaseModel):
+    # 权限列表
+    total: int
+    perms: List[PermBase]
+
+
+class RolePerm(BaseModel):
+    key: str
+    label: str
+
+
+class RolePerms(BaseModel):
+    perms: List[RolePerm]
+    choose_perms: List[str]
+
+
+class RoleEditPerms(BaseModel):
+    # 修改权限模型
+    role_id: str
+    perms: List[str]

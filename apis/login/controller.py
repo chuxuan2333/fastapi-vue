@@ -21,9 +21,9 @@ def authenticate_user(username: str, password: str):
     """
     user = get_user(username)
     if not user:
-        return False
+        return None
     if not user.check_password(password):
-        return False
+        return None
     return user
 
 
@@ -101,6 +101,11 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         )
     access_token = create_access_token(data={"sub": user.username})
     return JSONResponse({"access_token": access_token.decode(), "token_type": "bearer"})
+
+
+@login_router.get("/test")
+def test_login():
+    return JSONResponse({"message": "this is test"})
 
 
 @login_router.post("/logout", name="用户登出")

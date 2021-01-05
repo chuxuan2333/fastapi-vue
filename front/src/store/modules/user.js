@@ -1,5 +1,5 @@
 import { login, logout, getInfo, edit } from '@/api/user'
-import { getToken, setToken, removeToken, setOperator, getOperator } from '@/utils/auth'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
@@ -7,7 +7,6 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    operator: getOperator(),
     menus: []
   }
 }
@@ -27,9 +26,6 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
-  SET_OPERATOR: (state, username) => {
-    state.operator = username
-  },
   SET_MENUS: (state, menus) => {
     state.menus = menus
   }
@@ -44,8 +40,6 @@ const actions = {
         const data = response
         commit('SET_TOKEN', data.access_token)
         setToken(data.access_token)
-        commit('SET_OPERATOR', username)
-        setOperator(username)
         resolve()
       }).catch(error => {
         reject(error)

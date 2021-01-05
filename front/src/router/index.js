@@ -100,6 +100,11 @@ export const asyncRoutes = [
         meta: { title: '角色编辑', menu: 'role-edit' }
       },
       {
+        path: 'perms',
+        component: () => import('@/views/perm/permList'),
+        meta: { title: '权限管理', icon: 'eye-open', menu: 'perm-manage' }
+      },
+      {
         path: 'records',
         component: () => import('@/views/record/recordList'),
         meta: { title: '操作记录', icon: 'el-icon-postcard', menu: 'record-manage' }

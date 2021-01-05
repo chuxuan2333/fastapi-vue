@@ -26,13 +26,20 @@ export function getMenus(data) {
 }
 export function getPerms(data) {
   return request({
-    url: '/role/user_lists',
+    url: '/role/perm_lists',
     params: data
   })
 }
 export function submitUsers(data) {
   return request({
-    url: '/role/add_users',
+    url: '/role/edit_users',
+    method: 'post',
+    data: data
+  })
+}
+export function submitPerms(data) {
+  return request({
+    url: '/role/edit_perms',
     method: 'post',
     data: data
   })

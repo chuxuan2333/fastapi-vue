@@ -14,4 +14,4 @@ class Permission(Base):
     update_time = Column(DateTime(), default=datetime.now, onupdate=datetime.now, comment="最后一次更新时间")
 
     def __repr__(self):
-        return f"Premission:{self.perm_name}"
+        return f"Permission:{self.perm_name}"

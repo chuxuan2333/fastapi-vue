@@ -5,13 +5,13 @@
       <el-tab-pane label="菜单管理" name="menu" />
       <el-tab-pane label="权限管理" name="perm" />
     </el-tabs>
-    <el-transfer v-model="transferValue" style="margin-left:10%;width: 80%" :data="transferData" :titles="titles"  />
+    <el-transfer v-model="transferValue" style="margin-left:10%;width: 80%" :data="transferData" :titles="titles" />
     <el-button style="margin-left: 80%" type="primary" @click="submitTrans">提交</el-button>
   </div>
 </template>
 
 <script>
-import { getUsers, getMenus, getPerms, submitUsers } from '@/api/role'
+import { getUsers, getMenus, getPerms, submitUsers,submitPerms } from '@/api/role'
 export default {
   data() {
     return {
@@ -56,7 +56,6 @@ export default {
       this.loadData(this.activeName)
     },
     submitTrans() {
-      console.log(this.transferValue)
       switch (this.activeName) {
         case 'user':
           submitUsers({ role_id: this.roleId, users: this.transferValue }).then(response => {
@@ -69,6 +68,12 @@ export default {
         case 'menu':
           break
         case 'perm':
+          submitPerms({ role_id: this.roleId, perms: this.transferValue }).then(response => {
+            this.$message({
+              message: '权限更新成功',
+              type: 'success'
+            })
+          })
           break
       }
     }

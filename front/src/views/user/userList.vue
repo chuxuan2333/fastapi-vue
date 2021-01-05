@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="search">
       <el-button type="primary" style="margin-left: 2%" @click="addUser">新增用户</el-button>
-      <el-input v-model="search" style="width: 20%;float: right;margin-right: 5%" placeholder="请输入搜索用户名" prefix-icon="el-icon-search" @change="searchUser" />
+      <el-input v-model="search" style="width: 20%;float: right;margin-right: 5%" placeholder="请输入搜索用户名" prefix-icon="el-icon-search" @change="fetchData" />
     </div>
     <el-table
       v-loading="listLoading"
@@ -131,13 +131,13 @@ export default {
     }
   },
   created() {
-    this.fetchData(this.search)
+    this.fetchData()
   },
   methods: {
-    fetchData(searchUsername) {
+    fetchData() {
       this.listLoading = true
       const { pagination } = this
-      getUsers(pagination.currentPage, pagination.pageSize, searchUsername).then(response => {
+      getUsers(pagination.currentPage, pagination.pageSize, this.search).then(response => {
         this.users = response.users
         this.listLoading = false
         pagination.total = response.total
@@ -179,9 +179,6 @@ export default {
     indexMethod(index) {
       // 索引改变
       return index + (this.pagination.currentPage - 1) * this.pagination.pageSize + 1
-    },
-    searchUser() {
-      this.fetchData(this.search)
     },
     addUser() {
       this.$router.push({ path: '/user/add' })

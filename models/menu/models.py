@@ -10,6 +10,7 @@ class Menu(Base):
     menu_id = Column(BigInteger, primary_key=True, index=True, default=generate_id, doc="菜单id")
     menu_name = Column(String(20), nullable=False, unique=True, doc="菜单名称")
     menu_flag = Column(String(20), nullable=False, doc="前端标识")
+    parent_id = Column(BigInteger,doc="父级菜单id")
     creat_time = Column(DateTime(), default=datetime.now, comment="创建时间")
     update_time = Column(DateTime(), default=datetime.now, onupdate=datetime.now, comment="最后一次更新时间")
 

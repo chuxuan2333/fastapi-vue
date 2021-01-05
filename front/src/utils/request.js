@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken, getOperator } from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 const JSONBig = require('json-bigint')({ 'storeAsString': true })
 // create an axios instance
 const service = axios.create({
@@ -23,9 +23,6 @@ service.interceptors.request.use(
     if (store.getters.token) {
       // 请求自动添加header的token
       config.headers['Authorization'] = 'Bearer ' + getToken()
-    }
-    if (store.getters.operator) {
-      config.headers['operator'] = getOperator()
     }
     return config
   },
