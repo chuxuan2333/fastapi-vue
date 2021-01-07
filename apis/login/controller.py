@@ -10,7 +10,7 @@ from schema.user import Token
 from models.user.models import User
 
 login_router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login/")
 
 SESSION_KEY = ""
 
@@ -81,7 +81,7 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     return current_user
 
 
-@login_router.post("/login", response_model=Token, name="用户登陆")
+@login_router.post("/login/", response_model=Token, name="用户登陆")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     """
     获取token
