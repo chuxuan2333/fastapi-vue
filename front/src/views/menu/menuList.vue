@@ -156,7 +156,6 @@ export default {
             menu_flag: response.menu_flag
           }
         })
-
       }
     }
   }
