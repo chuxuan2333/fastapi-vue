@@ -20,7 +20,7 @@ export function getUsers(data) {
 }
 export function getMenus(data) {
   return request({
-    url: '/role/user_lists',
+    url: '/role/menu_lists',
     params: data
   })
 }
@@ -40,6 +40,13 @@ export function submitUsers(data) {
 export function submitPerms(data) {
   return request({
     url: '/role/edit_perms',
+    method: 'post',
+    data: data
+  })
+}
+export function submitMenus(data) {
+  return request({
+    url: '/role/edit_menus',
     method: 'post',
     data: data
   })

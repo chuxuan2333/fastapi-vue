@@ -130,14 +130,14 @@ export default {
       if (this.addFlag) {
         addPerm(this.newPerm).then(response => {
           this.$message({
-            message: '权限添加成功',
+            message: response.message,
             type: 'success'
           })
         })
       } else {
         editPerm(this.newPerm).then(response => {
           this.$message({
-            message: '权限修改成功',
+            message: response.message,
             type: 'success'
           })
         })

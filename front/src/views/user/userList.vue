@@ -155,9 +155,9 @@ export default {
       this.dialogFormVisible = true
     },
     postEditUser() {
-      this.$store.dispatch('user/editUser', this.user).then(() => {
+      this.$store.dispatch('user/editUser', this.user).then(response => {
         this.$message({
-          message: '用户信息修改成功',
+          message: response.message,
           type: 'success'
         })
         this.dialogFormVisible = false

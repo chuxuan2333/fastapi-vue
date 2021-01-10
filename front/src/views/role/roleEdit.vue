@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { getUsers, getMenus, getPerms, submitUsers,submitPerms } from '@/api/role'
+import { getUsers, getMenus, getPerms, submitUsers, submitPerms, submitMenus } from '@/api/role'
 export default {
   data() {
     return {
@@ -60,17 +60,23 @@ export default {
         case 'user':
           submitUsers({ role_id: this.roleId, users: this.transferValue }).then(response => {
             this.$message({
-              message: '成员更新成功',
+              message: response.message,
               type: 'success'
             })
           })
           break
         case 'menu':
+          submitMenus({ role_id: this.roleId, menus: this.transferValue }).then(response => {
+            this.$message({
+              message: response.message,
+              type: 'success'
+            })
+          })
           break
         case 'perm':
           submitPerms({ role_id: this.roleId, perms: this.transferValue }).then(response => {
             this.$message({
-              message: '权限更新成功',
+              message: response.message,
               type: 'success'
             })
           })

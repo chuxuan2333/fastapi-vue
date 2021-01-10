@@ -2,6 +2,8 @@ from copy import deepcopy
 from fastapi import APIRouter, Depends, HTTPException, Request
 from core.db import get_db
 from models.user.models import User
+from models.role.models import RoleUserRelation, MenuRoleRelation
+from models.menu.models import Menu
 from apis.perm.controller import check_perm
 from apis.login.controller import get_current_active_user
 from sqlalchemy.orm import Session
@@ -13,11 +15,14 @@ user_router = APIRouter()
 
 
 @user_router.get("/me", response_model=UserBase, name="获取登陆用户详情")
-def me(user: User = Depends(get_current_active_user)):
+def me(user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    menus = db.query(Menu.menu_flag).join(MenuRoleRelation, MenuRoleRelation.menu_id == Menu.menu_id).join(
+        RoleUserRelation, RoleUserRelation.role_id == MenuRoleRelation.role_id).filter(
+        RoleUserRelation.user_id == user.user_id).all()
+    menus = [menu.menu_flag for menu in menus]
     user_dict = {"username": user.username, "email": user.email, "is_active": user.is_active,
                  "nick_name": user.nick_name,
-                 "menus": ["system-manage", "user-manage", "record-manage", "user-add", "role-manage", "role-edit",
-                           "perm-manage"]}
+                 "menus": menus}
     return UserBase(**user_dict)
 
 

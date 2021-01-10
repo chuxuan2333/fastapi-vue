@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div>
-      <el-button type="primary" style="float:right" @click="addVisible=true">新增角色</el-button>
+      <el-button type="primary" @click="addVisible=true">新增角色</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -75,7 +75,7 @@ export default {
     addRole() {
       roleAdd(this.newRole).then(response => {
         this.$message({
-          message: '角色添加成功',
+          message: response.message,
           type: 'success'
         })
         this.addVisible = false

@@ -65,9 +65,9 @@ export default {
       this.$router.go(-1)
     },
     postEditSelf() {
-      this.$store.dispatch('user/editSelf', this.editSelf).then(() => {
+      this.$store.dispatch('user/editSelf', this.editSelf).then(response => {
         this.$message({
-          message: '用户信息修改成功',
+          message: response.message,
           type: 'success'
         })
       }).catch(() => {
