@@ -27,6 +27,7 @@ INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`,
 INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1348231036550647808, '查询菜单', '/menu/get_menu_info', NOW(), NOW());
 INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1348244866995458048, '角色所有菜单', '/role/menu_lists', NOW(), NOW());
 INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1348246460768063488, '角色菜单修改', '/role/edit_menus', NOW(), NOW());
+INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1348437874474881024, '修改权限', '/perm/edit_perm', NOW(), NOW());
 
 
 INSERT INTO `role`(`role_id`, `role_name`, `role_desc`, `creat_time`, `update_time`) VALUES (1346283931393200128, '管理员', '系统管理员', NOW(), NOW());
@@ -50,6 +51,8 @@ INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1348246490526650368,
 INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1348246490539233280, 1346283931393200128, 1348231036550647808);
 INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1348246490547621888, 1346283931393200128, 1348244866995458048);
 INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1348246490560204800, 1346283931393200128, 1348246460768063488);
+INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1348438011699924992, 1346283931393200128, 1348437874474881024);
+
 
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_time`, `parent_id`) VALUES (1348170310200987648, '系统管理', 'system-manage', NOW(), NOW(), 0);
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_time`, `parent_id`) VALUES (1348170732772921344, '用户管理', 'user-manage', NOW(), NOW(), 1348170310200987648);
