@@ -82,7 +82,7 @@ async def edit_perm(perm_id: str, perm_edit: PermBase, request: Request, db: Ses
         old_perm = db.query(Permission).filter(Permission.perm_name == perm_edit.perm_name).first()
         if old_perm:
             raise HTTPException(status_code=406, detail="修改后的权限名称重复")
-    if perm_edit.perm_interface != perm.perm_name:
+    if perm_edit.perm_interface != perm.perm_interface:
         old_perm = db.query(Permission).filter(Permission.perm_interface == perm_edit.perm_interface).first()
         if old_perm:
             raise HTTPException(status_code=406, detail="修改后的权限接口重复")
