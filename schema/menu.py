@@ -6,4 +6,4 @@ class MenuBase(BaseModel):
     menu_name: str
     menu_flag: str
     parent_id: str = '0'
-    menu_id: Optional[str] = ''
+    menu_id: Optional[str] = None

@@ -31,7 +31,7 @@ async def menu_lists(db: Session = Depends(get_db), current_user: User = Depends
 
 @menu_router.put('/add_menu', name="新增菜单")
 async def add_menu(menu: MenuBase, request: Request, db: Session = Depends(get_db),
-             current_user: User = Depends(check_perm('/menu/add_menu'))):
+                   current_user: User = Depends(check_perm('/menu/add_menu'))):
     # 确认menu不存在
     old_menu = db.query(Menu).filter(or_(Menu.menu_name == menu.menu_name, Menu.menu_flag == menu.menu_flag)).first()
     if old_menu:
@@ -44,9 +44,9 @@ async def add_menu(menu: MenuBase, request: Request, db: Session = Depends(get_d
     return {"message": "菜单新增成功"}
 
 
-@menu_router.post('/edit_menu')
+@menu_router.post('/edit_menu', name="修改菜单")
 async def edit_menu(menu: MenuBase, request: Request, db: Session = Depends(get_db),
-              current_user: User = Depends(check_perm('/menu/edit_menu'))):
+                    current_user: User = Depends(check_perm('/menu/edit_menu'))):
     # 确认menu不存在
     old_menu = db.query(Menu).filter(Menu.menu_id == int(menu.menu_id)).first()
     if not old_menu:
@@ -70,9 +70,9 @@ async def edit_menu(menu: MenuBase, request: Request, db: Session = Depends(get_
     return {"message": "菜单修改成功"}
 
 
-@menu_router.get('/get_menu_info')
+@menu_router.get('/get_menu_info',name="获取菜单详细信息")
 async def get_menu_info(menu_id: str, db: Session = Depends(get_db),
-                  current_user: User = Depends(check_perm('/menu/get_menu_info'))):
+                        current_user: User = Depends(check_perm('/menu/get_menu_info'))):
     menu = db.query(Menu).filter(Menu.menu_id == int(menu_id)).first()
     if not menu:
         raise HTTPException(status_code=406, detail="没有此菜单")
