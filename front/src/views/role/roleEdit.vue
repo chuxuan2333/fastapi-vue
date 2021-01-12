@@ -31,21 +31,21 @@ export default {
       switch (name) {
         case 'user':
           getUsers({ role_id: this.roleId }).then(response => {
-            this.titles = ['所有用户', '选中用户']
+            this.titles = ['未选用户', '选中用户']
             this.transferData = response.users
             this.transferValue = response.choose_users
           })
           break
         case 'menu':
           getMenus({ role_id: this.roleId }).then(response => {
-            this.titles = ['所有菜单', '选中菜单']
+            this.titles = ['未选菜单', '选中菜单']
             this.transferData = response.menus
             this.transferValue = response.choose_menus
           })
           break
         case 'perm':
           getPerms({ role_id: this.roleId }).then(response => {
-            this.titles = ['所有权限', '赋予权限']
+            this.titles = ['未选权限', '拥有权限']
             this.transferData = response.perms
             this.transferValue = response.choose_perms
           })

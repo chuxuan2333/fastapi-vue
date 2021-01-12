@@ -103,11 +103,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return JSONResponse({"access_token": access_token.decode(), "token_type": "bearer"})
 
 
-@login_router.get("/test")
-def test_login():
-    return JSONResponse({"message": "this is test"})
-
-
 @login_router.post("/logout", name="用户登出")
 def logout():
     return {"message": "已登出"}

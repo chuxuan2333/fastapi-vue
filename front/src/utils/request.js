@@ -70,14 +70,14 @@ service.interceptors.response.use(
       })
       return Promise.resolve('登陆异常已处理')
     }
-    // 406帐号密码错误或未激活
+    // 406错误
     if (error.response.status === 406) {
       Message({
         message: error.response.data.detail,
         type: 'error',
         duration: 5 * 1000
       })
-      return Promise.reject('登陆异常已处理')
+      return Promise.reject('异常已处理')
     }
     Message({
       message: error.message,

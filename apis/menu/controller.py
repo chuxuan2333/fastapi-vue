@@ -14,7 +14,7 @@ menu_router = APIRouter()
 
 
 @menu_router.get('/menu_lists', name="菜单列表")
-def menu_lists(db: Session = Depends(get_db), current_user: User = Depends(check_perm('/menu/menu_lists'))):
+async def menu_lists(db: Session = Depends(get_db), current_user: User = Depends(check_perm('/menu/menu_lists'))):
     # 查询一级菜单
     menu_list = []
     all_menus = db.query(Menu).all()
@@ -30,7 +30,7 @@ def menu_lists(db: Session = Depends(get_db), current_user: User = Depends(check
 
 
 @menu_router.put('/add_menu', name="新增菜单")
-def add_menu(menu: MenuBase, request: Request, db: Session = Depends(get_db),
+async def add_menu(menu: MenuBase, request: Request, db: Session = Depends(get_db),
              current_user: User = Depends(check_perm('/menu/add_menu'))):
     # 确认menu不存在
     old_menu = db.query(Menu).filter(or_(Menu.menu_name == menu.menu_name, Menu.menu_flag == menu.menu_flag)).first()
@@ -45,7 +45,7 @@ def add_menu(menu: MenuBase, request: Request, db: Session = Depends(get_db),
 
 
 @menu_router.post('/edit_menu')
-def edit_menu(menu: MenuBase, request: Request, db: Session = Depends(get_db),
+async def edit_menu(menu: MenuBase, request: Request, db: Session = Depends(get_db),
               current_user: User = Depends(check_perm('/menu/edit_menu'))):
     # 确认menu不存在
     old_menu = db.query(Menu).filter(Menu.menu_id == int(menu.menu_id)).first()
@@ -71,7 +71,7 @@ def edit_menu(menu: MenuBase, request: Request, db: Session = Depends(get_db),
 
 
 @menu_router.get('/get_menu_info')
-def get_menu_info(menu_id: str, db: Session = Depends(get_db),
+async def get_menu_info(menu_id: str, db: Session = Depends(get_db),
                   current_user: User = Depends(check_perm('/menu/get_menu_info'))):
     menu = db.query(Menu).filter(Menu.menu_id == int(menu_id)).first()
     if not menu:

@@ -62,7 +62,7 @@ async def role_edit_user(role_users: RoleEditUsers, db: Session = Depends(get_db
 
 
 @role_router.post("/edit_perms", name="角色权限修改")
-def role_edit_perms(edit_perms: RoleEditPerms, db: Session = Depends(get_db),
+async def role_edit_perms(edit_perms: RoleEditPerms, db: Session = Depends(get_db),
                     current_user: User = Depends(check_perm('/role/edit_perms'))):
     role_id = int(edit_perms.role_id)
     # 判断role是否存在
@@ -81,7 +81,7 @@ def role_edit_perms(edit_perms: RoleEditPerms, db: Session = Depends(get_db),
 
 
 @role_router.post("/edit_menus", name="角色菜单修改")
-def role_edit_perms(edit_menus: RoleEditMenus, db: Session = Depends(get_db),
+async def role_edit_perms(edit_menus: RoleEditMenus, db: Session = Depends(get_db),
                     current_user: User = Depends(check_perm('/role/edit_menus'))):
     role_id = int(edit_menus.role_id)
     # 判断role是否存在

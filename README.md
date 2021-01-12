@@ -62,3 +62,28 @@ npm run dev
 
 #### 主页
 ![dashboard](asserts/dashboard.png)
+
+#### 用户管理
+![users](asserts/users.png)
+
+![edit_user](asserts/user_edit.png)
+
+![add_user](asserts/user_add.png)
+
+#### 角色管理
+![role](asserts/role.png)
+
+![edit_role_user](asserts/edit_role_user.png)
+
+授权每个角色拥有的菜单
+![edit_role_menu](asserts/edit_role_menu.png)
+
+授权每个角色的接口访问权限
+![edit_role_perm](asserts/edit_role_perm.png)
+
+#### 权限管理
+需要授权的接口
+![perm](asserts/perm.png)
+
+#### 菜单管理
+![menu](asserts/menu.png)

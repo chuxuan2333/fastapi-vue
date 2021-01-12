@@ -11,7 +11,7 @@ record_router = APIRouter()
 
 
 @record_router.get("/all_records", response_model=AllRecords, name="获取所有数据操作记录")
-def all_records(page_no: int, page_size: int, search_info: str, db: Session = Depends(get_db),
+async def all_records(page_no: int, page_size: int, search_info: str, db: Session = Depends(get_db),
                 current_user: User = Depends(check_perm('/record/all_records'))):
     if search_info:
         total = db.query(func.count(OperateRecords.record_id)).filter(

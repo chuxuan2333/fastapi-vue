@@ -15,7 +15,7 @@ user_router = APIRouter()
 
 
 @user_router.get("/me", response_model=UserBase, name="获取登陆用户详情")
-def me(user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
+async def me(user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
     menus = db.query(Menu.menu_flag).join(MenuRoleRelation, MenuRoleRelation.menu_id == Menu.menu_id).join(
         RoleUserRelation, RoleUserRelation.role_id == MenuRoleRelation.role_id).filter(
         RoleUserRelation.user_id == user.user_id).all()
@@ -27,7 +27,7 @@ def me(user: User = Depends(get_current_active_user), db: Session = Depends(get_
 
 
 @user_router.get("/get_user_info", response_model=UserBase, name="获取指定用户详情")
-def get_user_info(username: str, db: Session = Depends(get_db),
+async def get_user_info(username: str, db: Session = Depends(get_db),
                   current_user: User = Depends(check_perm('/users/get_user_info'))):
     user = db.query(User).filter(User.username == username).first()
     if user:
@@ -39,7 +39,7 @@ def get_user_info(username: str, db: Session = Depends(get_db),
 
 
 @user_router.get("/all_users", response_model=AllUser, name="获取所有用户")
-def all_users(page_no: int, page_size: int, search_username: str = '', db: Session = Depends(get_db),
+async def all_users(page_no: int, page_size: int, search_username: str = '', db: Session = Depends(get_db),
               current_user: User = Depends(check_perm('/users/all_users'))):
     # 分页查询,前端需要传递页数,和每页多少个
     # 数据分页与list切片格式保持一致
@@ -57,7 +57,7 @@ def all_users(page_no: int, page_size: int, search_username: str = '', db: Sessi
 
 
 @user_router.put("/create_user", responses={406: {"description": "创建的用户已经存在"}}, name="创建新用户")
-def create_user(user: NewUser, request: Request, db: Session = Depends(get_db),
+async def create_user(user: NewUser, request: Request, db: Session = Depends(get_db),
                 current_user: User = Depends(check_perm('/users/create_user'))):
     old_user = db.query(User).filter(or_(User.username == user.username, User.email == user.email)).first()
     if old_user:
@@ -75,7 +75,7 @@ def create_user(user: NewUser, request: Request, db: Session = Depends(get_db),
 
 
 @user_router.post("/update_user", name="更新用户信息")
-def update_user(request: Request, modify_user: ModifyUser, db: Session = Depends(get_db),
+async def update_user(request: Request, modify_user: ModifyUser, db: Session = Depends(get_db),
                 current_user: User = Depends(check_perm('/users/update_user'))):
     """
     用户名不可以修改
