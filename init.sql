@@ -28,7 +28,9 @@ INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`,
 INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1348244866995458048, '角色所有菜单', '/role/menu_lists', NOW(), NOW());
 INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1348246460768063488, '角色菜单修改', '/role/edit_menus', NOW(), NOW());
 INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1348437874474881024, '修改权限', '/perm/edit_perm', NOW(), NOW());
-
+INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1349277847168094208, 'cmdb类型列表', '/cmdb/type_list', NOW(), NOW());
+INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1349277962737946624, '新增cmdb类型', '/cmdb/add_type', NOW(), NOW());
+INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1349278125342724096, '修改cmdb类型', '/cmdb/edit_type', NOW(), NOW());
 
 INSERT INTO `role`(`role_id`, `role_name`, `role_desc`, `creat_time`, `update_time`) VALUES (1346283931393200128, '管理员', '系统管理员', NOW(), NOW());
 INSERT INTO `role_user`(`id`, `role_id`, `user_id`) VALUES (1346283973071998976, 1346283931393200128, 1334394783375953920);
@@ -52,6 +54,10 @@ INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1348246490539233280,
 INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1348246490547621888, 1346283931393200128, 1348244866995458048);
 INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1348246490560204800, 1346283931393200128, 1348246460768063488);
 INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1348438011699924992, 1346283931393200128, 1348437874474881024);
+INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1349278168187539456, 1346283931393200128, 1349277847168094208);
+INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1349278168216899584, 1346283931393200128, 1349277962737946624);
+INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1349278168246259712, 1346283931393200128, 1349278125342724096);
+
 
 
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_time`, `parent_id`) VALUES (1348170310200987648, '系统管理', 'system-manage', NOW(), NOW(), 0);
@@ -62,6 +68,8 @@ INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_ti
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_time`, `parent_id`) VALUES (1348225668672000000, '操作记录', 'record-manage', NOW(), NOW(), 1348170310200987648);
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_time`, `parent_id`) VALUES (1348234823931662336, '新增用户', 'user-add', NOW(), NOW(), 1348170732772921344);
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_time`, `parent_id`) VALUES (1348235042819805184, '修改角色', 'role-edit', NOW(), NOW(), 1348223628373790720);
+INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `parent_id`, `creat_time`, `update_time`) VALUES (1349233447075450880, '资源管理', 'cmdb-manage', 0, NOW(), NOW());
+INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `parent_id`, `creat_time`, `update_time`) VALUES (1349233912022437888, '模型', 'cmdb-model', 1349233447075450880, NOW(), NOW());
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514846101504, 1346283931393200128, 1348170310200987648);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514858684416, 1346283931393200128, 1348170732772921344);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514871267328, 1346283931393200128, 1348223628373790720);
@@ -70,6 +78,21 @@ INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514896433152,
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514904821760, 1346283931393200128, 1348234823931662336);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514913210368, 1346283931393200128, 1348235042819805184);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514925793280, 1346283931393200128, 1348224370950148096);
+INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1349233969132081152, 1346283931393200128, 1349233447075450880);
+INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1349233969161441280, 1346283931393200128, 1349233912022437888);
 
 
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349282902902444032, 'mysql', 'cc-mysql', 'MySQL', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349283493586276352, 'kafka', 'cc-kafka', 'Kafka', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349284648261390336, 'rabbitmq', 'cc-rabbitmq', 'RabbitMQ', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349285013341999104, 'rocketmq', 'cc-rocketmq', 'RocketMQ', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349285318741856256, 'ups', 'cc-ups', 'UPS', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349286101822607360, 'kubernetes', 'cc-kubernetes', 'K8s', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349286546645323776, 'mongodb', 'cc-mongodb', 'MongoDB', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349287073940639744, 'oracle', 'cc-oracle', 'Oracle', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349287428598403072, 'redis', 'cc-redis', 'Redis', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349287493794664448, 'nginx', 'cc-nginx', 'Nginx', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349287571687084032, 'printer', 'cc-printer', '打印机', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349287747642331136, 'win-server', 'cc-win7', 'windows服务器', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349287994342903808, 'router', 'cc-router', '路由器', NOW(), NOW());
 
