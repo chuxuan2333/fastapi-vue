@@ -70,6 +70,8 @@ INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_ti
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_time`, `parent_id`) VALUES (1348235042819805184, '修改角色', 'role-edit', NOW(), NOW(), 1348223628373790720);
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `parent_id`, `creat_time`, `update_time`) VALUES (1349233447075450880, '资源管理', 'cmdb-manage', 0, NOW(), NOW());
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `parent_id`, `creat_time`, `update_time`) VALUES (1349233912022437888, '模型', 'cmdb-model', 1349233447075450880, NOW(), NOW());
+INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `parent_id`, `creat_time`, `update_time`) VALUES (1349347469275828224, '修改类型', 'cmdb-type-edit', 1349233447075450880, NOW(), NOW());
+
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514846101504, 1346283931393200128, 1348170310200987648);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514858684416, 1346283931393200128, 1348170732772921344);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514871267328, 1346283931393200128, 1348223628373790720);
@@ -80,6 +82,7 @@ INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514913210368,
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514925793280, 1346283931393200128, 1348224370950148096);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1349233969132081152, 1346283931393200128, 1349233447075450880);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1349233969161441280, 1346283931393200128, 1349233912022437888);
+INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1349347506827431936, 1346283931393200128, 1349347469275828224);
 
 
 INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349282902902444032, 'mysql', 'cc-mysql', 'MySQL', NOW(), NOW());

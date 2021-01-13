@@ -67,9 +67,10 @@ export default {
     postEditSelf() {
       this.$store.dispatch('user/editSelf', this.editSelf).then(response => {
         this.$message({
-          message: response.message,
+          message: '更新成功',
           type: 'success'
         })
+        this.$router.push('/')
       }).catch(() => {
         this.listLoading = false
       })

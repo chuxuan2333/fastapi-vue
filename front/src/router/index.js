@@ -131,6 +131,12 @@ export const asyncRoutes = [
         path: 'model',
         component: () => import('@/views/cmdb/model'),
         meta: { title: '模型', icon: 'cc-module', menu: 'cmdb-model' }
+      },
+      {
+        path: 'edit_type/:id',
+        hidden: true,
+        component: () => import('@/views/cmdb/typeEdit'),
+        meta: { title: '修改类型', menu: 'cmdb-type-edit' }
       }
     ]
   },

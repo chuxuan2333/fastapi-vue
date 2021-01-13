@@ -5,7 +5,7 @@
     </div>
     <ul class="model-list clearfix">
       <li v-for="type in types" :key="type.type_name" class="model-item bgc-white">
-        <div class="info-model">
+        <div class="info-model" @click="typeEdit(type.type_id)">
           <div class="icon-box" align="center">
             <svg-icon :icon-class="type.type_icon" class-name="icon" />
           </div>
@@ -89,6 +89,9 @@ export default {
         }
         )
       })
+    },
+    typeEdit(typeId) {
+      this.$router.push(`/cmdb/edit_type/${typeId}`)
     }
   }
 }
@@ -151,9 +154,8 @@ export default {
             width: 66px;
             height: 68px;
             font-size: 32px;
-            color: #000000;
+            color: #2b2f3a;
             .icon {
-
                 height: 68px;
             }
         }
