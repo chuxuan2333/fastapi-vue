@@ -21,7 +21,7 @@
       </el-table-column>
     </el-table>
     <el-dialog title="添加角色" :visible.sync="addVisible">
-      <el-form ref="userForm" :model="newRole" :rules="addRule">
+      <el-form ref="roleForm" :model="newRole" :rules="addRule">
         <el-form-item label="角色名" prop="role_name">
           <el-input v-model="newRole.role_name" autocomplete="off" />
         </el-form-item>

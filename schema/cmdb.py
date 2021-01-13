@@ -5,6 +5,7 @@ from typing import List, Optional
 class CMDBBase(BaseModel):
     type_id: Optional[str] = None
     type_name: str
+    type_label: str
     type_icon: str
 
 

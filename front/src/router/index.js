@@ -115,6 +115,25 @@ export const asyncRoutes = [
         meta: { title: '操作记录', icon: 'el-icon-postcard', menu: 'record-manage' }
       }]
   },
+  {
+    path: '/cmdb',
+    name: '资源管理',
+    component: Layout,
+    alwaysShow: true,
+    meta: {
+      title: '资源管理',
+      icon: 'cc-architecture',
+      menu: 'cmdb-manage'
+    },
+    redirect: '/cmdb/model',
+    children: [
+      {
+        path: 'model',
+        component: () => import('@/views/cmdb/model'),
+        meta: { title: '模型', icon: 'cc-module', menu: 'cmdb-model' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

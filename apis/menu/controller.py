@@ -36,7 +36,8 @@ async def add_menu(menu: MenuBase, request: Request, db: Session = Depends(get_d
     old_menu = db.query(Menu).filter(or_(Menu.menu_name == menu.menu_name, Menu.menu_flag == menu.menu_flag)).first()
     if old_menu:
         raise HTTPException(status_code=406, detail="菜单已存在")
-    new_menu = Menu(menu_name=menu.menu_name, menu_flag=menu.menu_flag, parent_id=int(menu.parent_id))
+    new_menu = Menu(menu_name=menu.menu_name, menu_flag=menu.menu_flag,
+                    parent_id="0" if not menu.parent_id else int(menu.parent_id))
     new_record = deepcopy(new_menu)
     db.add(new_menu)
     db.commit()
@@ -70,7 +71,7 @@ async def edit_menu(menu: MenuBase, request: Request, db: Session = Depends(get_
     return {"message": "菜单修改成功"}
 
 
-@menu_router.get('/get_menu_info',name="获取菜单详细信息")
+@menu_router.get('/get_menu_info', name="获取菜单详细信息")
 async def get_menu_info(menu_id: str, db: Session = Depends(get_db),
                         current_user: User = Depends(check_perm('/menu/get_menu_info'))):
     menu = db.query(Menu).filter(Menu.menu_id == int(menu_id)).first()

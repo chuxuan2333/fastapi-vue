@@ -14,8 +14,9 @@ cmdb_router = APIRouter()
 @cmdb_router.get('/type_list', response_model=CMDBTypeList, name="获取CMDB中所有对象类型")
 def cmdb_type_list(db: Session = Depends(get_db), current_user: User = Depends(check_perm('/cmdb/type_list'))):
     cmdb_types = db.query(CMDBType).all()
-    return CMDBTypeList(types=[{"cmdb_type_id": str(cmdb_type.cmdb_type_id), "cmdb_type_name": cmdb_type.cmdb_type_name,
-                                "cmdb_type_icon": cmdb_type.cmdb_type_icon} for cmdb_type in cmdb_types])
+    return CMDBTypeList(types=[{"type_id": str(cmdb_type.cmdb_type_id), "type_name": cmdb_type.cmdb_type_name,
+                                "type_label": cmdb_type.cmdb_type_label, "type_icon": cmdb_type.cmdb_type_icon} for
+                               cmdb_type in cmdb_types])
 
 
 @cmdb_router.put('/add_type', name="新增CMDB对象类型")
@@ -25,7 +26,8 @@ def cmdb_add_type(new_type: CMDBBase, request: Request, db: Session = Depends(ge
     old_type = db.query(CMDBType).filter(CMDBType.cmdb_type_name == new_type.type_name).first()
     if old_type:
         raise HTTPException(status_code=406, detail="创建的类型已经存在")
-    cmdb_type = CMDBType(cmdb_type_name=new_type.type_name, cmdb_type_icon=new_type.type_icon)
+    cmdb_type = CMDBType(cmdb_type_name=new_type.type_name, cmdb_type_icon=new_type.type_icon,
+                         cmdb_type_label=new_type.type_label)
     new_record = deepcopy(cmdb_type)
     db.add(cmdb_type)
     db.commit()
@@ -47,6 +49,7 @@ def cmdb_edit_type(edit_type: CMDBBase, request: Request, db: Session = Depends(
     old_record = deepcopy(old_type)
     old_type.cmdb_type_name = edit_type.type_name
     old_type.cmdb_type_icon = edit_type.type_icon
+    old_type.cmdb_type_label = edit_type.type_label
     new_record = deepcopy(old_type)
     db.add(old_type)
     db.commit()

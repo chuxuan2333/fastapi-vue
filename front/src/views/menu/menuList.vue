@@ -100,6 +100,7 @@ export default {
     addMenu(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          if (!this.selectMenu.parent_id) this.selectMenu.parent_id = '0'
           if (this.editFlag) {
             editMenu(this.selectMenu).then(response => {
               this.$message({
@@ -155,6 +156,7 @@ export default {
             menu_name: response.menu_name,
             menu_flag: response.menu_flag
           }
+          if (this.selectMenu.parent_id === '0') this.selectMenu.parent_id = null
         })
       }
     }

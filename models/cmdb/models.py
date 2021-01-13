@@ -10,7 +10,8 @@ class CMDBType(Base):
     cmdb_type_id = Column(BigInteger, primary_key=True, index=True, default=generate_id, unique=True,
                           comment="cmdb类型id")
     cmdb_type_name = Column(String(100), nullable=False, comment="cmdb类型名")
-    cmdb_type_icon = Column(String(20),comment="显示图标")
+    cmdb_type_label = Column(String(100), nullable=False, comment="cmdb类型显示名")
+    cmdb_type_icon = Column(String(20), comment="显示图标")
     creat_time = Column(DateTime(), default=datetime.now, comment="创建时间")
     update_time = Column(DateTime(), default=datetime.now, onupdate=datetime.now, comment="最后一次更新时间")
 
