@@ -136,7 +136,7 @@ export const asyncRoutes = [
         path: 'edit_type/:id',
         hidden: true,
         component: () => import('@/views/cmdb/typeEdit'),
-        meta: { title: '修改类型', menu: 'cmdb-type-edit' }
+        meta: { title: '修改模型', menu: 'cmdb-type-edit' }
       }
     ]
   },

@@ -16,7 +16,7 @@
       <el-table-column label="成员个数" property="user_count" />
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle @click="editRole(scope.row)" ></el-button>
+          <el-button type="primary" icon="el-icon-edit" circle @click="editRole(scope.row)" />
         </template>
       </el-table-column>
     </el-table>

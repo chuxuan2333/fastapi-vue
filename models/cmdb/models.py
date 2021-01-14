@@ -22,10 +22,10 @@ class CMDBType(Base):
 class CMDBItem(Base):
     __tablename__ = "cmdb_item"
     __table_args__ = ({"comment": "CMDB具体属性表"})
-    cmdb_desc_id = Column(BigInteger, primary_key=True, index=True, default=generate_id, unique=True,
+    item_id = Column(BigInteger, primary_key=True, index=True, default=generate_id, unique=True,
                           comment="cmdb属性id")
-    desc_name = Column(String(20), comment="cmbd类型属性名")
-    desc_lable = Column(String(20), comment="cmdb类型属性label")
+    item_name = Column(String(20), comment="cmbd类型属性名")
+    item_lable = Column(String(20), comment="cmdb类型属性label")
     cmdb_type_id = Column(BigInteger, comment="cmdb类型id")
     creat_time = Column(DateTime(), default=datetime.now, comment="创建时间")
     update_time = Column(DateTime(), default=datetime.now, onupdate=datetime.now, comment="最后一次更新时间")

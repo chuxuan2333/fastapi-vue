@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from schema.cmdb import CMDBTypeList, CMDBBase
-from models.cmdb.models import CMDBType
+from models.cmdb.models import CMDBType, CMDBItem
 from models.user.models import User
 from core.db import get_db
 from apis.perm.controller import check_perm
@@ -56,3 +56,9 @@ def cmdb_edit_type(edit_type: CMDBBase, request: Request, db: Session = Depends(
     Record.create_operate_record(username=current_user.username, old_object=old_record, new_object=new_record,
                                  ip=request.client.host)
     return {"message": "类型修改成功"}
+
+
+@cmdb_router.get('/get_type_items', name="获取类型下所有的属性")
+def get_type_desc(type_id: str, db: Session = Depends(get_db),
+                  current_user: User = Depends(check_perm('/cmdb/get_type_items'))):
+    cmdb_type_items = db.query(CMDBItem).filter(CMDBItem.cmdb_type_id == int(type_id)).all()

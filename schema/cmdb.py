@@ -11,3 +11,13 @@ class CMDBBase(BaseModel):
 
 class CMDBTypeList(BaseModel):
     types: List[CMDBBase]
+
+
+class CMDBItemBase(BaseModel):
+    item_id: Optional[str] = None
+    item_label: str
+    item_name: str
+
+
+class CMDBItemList(BaseModel):
+    items: List[CMDBItemBase]

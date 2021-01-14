@@ -25,7 +25,17 @@
           <el-input v-model="newType.type_name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="类型图标" prop="type_icon">
-          <el-input v-model="newType.type_icon" autocomplete="off" />
+          <el-select v-model="newType.type_icon" filterable placeholder="请选择图标..">
+            <el-option
+              v-for="icon in icons"
+              :key="icon.icon_name"
+              :label="icon.icon_name"
+              :value="icon.icon_name"
+              align="center"
+            >
+              <svg-icon :icon-class="icon.icon_name" style="width: 60px;height: 30px" />
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -49,6 +59,9 @@ export default {
         type_name: null,
         type_icon: null
       },
+      icons: [
+        { 'icon_name': 'cc-activeMQ' }, { 'icon_name': 'cc-android' }, { 'icon_name': 'cc-apache' }, { 'icon_name': 'cc-apple' }, { 'icon_name': 'cc-architecture' }, { 'icon_name': 'cc-backstage' }, { 'icon_name': 'cc-balance' }, { 'icon_name': 'cc-broom' }, { 'icon_name': 'cc-business' }, { 'icon_name': 'cc-cabinet' }, { 'icon_name': 'cc-certificate' }, { 'icon_name': 'cc-clear' }, { 'icon_name': 'cc-cloud-host' }, { 'icon_name': 'cc-cloud-to-uploa' }, { 'icon_name': 'cc-collect' }, { 'icon_name': 'cc-cpu' }, { 'icon_name': 'cc-database' }, { 'icon_name': 'cc-db2' }, { 'icon_name': 'cc-del' }, { 'icon_name': 'cc-department' }, { 'icon_name': 'cc-domain' }, { 'icon_name': 'cc-elastic-search' }, { 'icon_name': 'cc-firewall' }, { 'icon_name': 'cc-hardware' }, { 'icon_name': 'cc-hide' }, { 'icon_name': 'cc-home' }, { 'icon_name': 'cc-idc' }, { 'icon_name': 'cc-iis' }, { 'icon_name': 'cc-influxdb' }, { 'icon_name': 'cc-ip' }, { 'icon_name': 'cc-kafka' }, { 'icon_name': 'cc-kubernetes' }, { 'icon_name': 'cc-linux' }, { 'icon_name': 'cc-list' }, { 'icon_name': 'cc-lock' }, { 'icon_name': 'cc-mail-server' }, { 'icon_name': 'cc-map' }, { 'icon_name': 'cc-market' }, { 'icon_name': 'cc-memory' }, { 'icon_name': 'cc-middleware' }, { 'icon_name': 'cc-module' }, { 'icon_name': 'cc-mongodb' }, { 'icon_name': 'cc-mysql' }, { 'icon_name': 'cc-net-port' }, { 'icon_name': 'cc-network-card' }, { 'icon_name': 'cc-network-equipment' }, { 'icon_name': 'cc-network-manage' }, { 'icon_name': 'cc-network-segment' }, { 'icon_name': 'cc-networks' }, { 'icon_name': 'cc-nginx' }, { 'icon_name': 'cc-oracle' }, { 'icon_name': 'cc-postgresql' }, { 'icon_name': 'cc-printer' }, { 'icon_name': 'cc-rabbitmq' }, { 'icon_name': 'cc-redis' }, { 'icon_name': 'cc-rocketmq' }, { 'icon_name': 'cc-router' }, { 'icon_name': 'cc-security' }, { 'icon_name': 'cc-security2' }, { 'icon_name': 'cc-server' }, { 'icon_name': 'cc-service' }, { 'icon_name': 'cc-setting' }, { 'icon_name': 'cc-sql-server' }, { 'icon_name': 'cc-sqlite' }, { 'icon_name': 'cc-star' }, { 'icon_name': 'cc-storage' }, { 'icon_name': 'cc-tomcat' }, { 'icon_name': 'cc-tree' }, { 'icon_name': 'cc-triangle' }, { 'icon_name': 'cc-unix' }, { 'icon_name': 'cc-ups' }, { 'icon_name': 'cc-user' }, { 'icon_name': 'cc-virtual' }, { 'icon_name': 'cc-vmware' }, { 'icon_name': 'cc-vsphere' }, { 'icon_name': 'cc-weblogic' }, { 'icon_name': 'cc-win7' }, { 'icon_name': 'cc-wireless' }
+      ],
       addRule: {
         type_label: [
           { required: true, message: '请输入类型标识', trigger: 'blur' },
@@ -56,7 +69,7 @@ export default {
         ],
         type_name: [
           { required: true, message: '请输入类型名', trigger: 'blur' },
-          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
         ],
         type_icon: [
           { required: true, message: '请输入类型图标', trigger: 'blur' },
@@ -154,7 +167,7 @@ export default {
             width: 66px;
             height: 68px;
             font-size: 32px;
-            color: #2b2f3a;
+            color: #3a84ff;
             .icon {
                 height: 68px;
             }
