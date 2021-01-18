@@ -25,7 +25,8 @@
         <template slot-scope="scope">
           <el-tag
             :type="scope.row.is_active === true ? 'primary' : 'danger'"
-            disable-transitions>{{ scope.row.is_active===true ? '已激活':'未激活' }}</el-tag>
+            disable-transitions
+          >{{ scope.row.is_active===true ? '已激活':'未激活' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
@@ -157,11 +158,11 @@ export default {
     postEditUser() {
       this.$store.dispatch('user/editUser', this.user).then(() => {
         this.dialogFormVisible = false
+        this.fetchData()
         this.$message({
           message: '用户信息修改成功',
           type: 'success'
         })
-        this.fetchData()
       }).catch(() => {
         this.listLoading = false
       })

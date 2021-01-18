@@ -73,7 +73,7 @@ export default {
       addRule: {
         perm_name: [
           { required: true, message: '请输入权限名', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
         ],
         perm_interface: [
           { required: true, message: '请输入接口', trigger: 'blur' },
@@ -129,6 +129,8 @@ export default {
       // addFlag为true就是add否则为edit
       if (this.addFlag) {
         addPerm(this.newPerm).then(response => {
+          this.listLoading = true
+          this.loadPerm()
           this.$message({
             message: response.message,
             type: 'success'
@@ -136,6 +138,8 @@ export default {
         })
       } else {
         editPerm(this.newPerm).then(response => {
+          this.listLoading = true
+          this.loadPerm()
           this.$message({
             message: response.message,
             type: 'success'
@@ -143,8 +147,6 @@ export default {
         })
       }
       this.addVisible = false
-      this.listLoading = true
-      this.loadPerm()
     }
   }
 }

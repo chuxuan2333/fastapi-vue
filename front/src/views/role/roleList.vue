@@ -74,12 +74,12 @@ export default {
     },
     addRole() {
       roleAdd(this.newRole).then(response => {
+        this.loadRole()
         this.$message({
           message: response.message,
           type: 'success'
         })
         this.addVisible = false
-        this.loadRole()
       })
     }
   }

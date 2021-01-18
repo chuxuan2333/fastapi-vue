@@ -15,6 +15,7 @@ class CMDBTypeList(BaseModel):
 
 class CMDBItemBase(BaseModel):
     item_id: Optional[str] = None
+    cmdb_type_id: Optional[str] = None
     item_label: str
     item_name: str
 

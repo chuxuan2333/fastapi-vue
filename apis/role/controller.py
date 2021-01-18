@@ -77,7 +77,7 @@ async def role_edit_perms(edit_perms: RoleEditPerms, db: Session = Depends(get_d
         role_perm_relation = PermRoleRelation(**{"role_id": role_id, "perm_id": perm_id})
         db.add(role_perm_relation)
         db.commit()
-    return {"message": "权限修改成功"}
+    return {"message": "接口权限修改成功"}
 
 
 @role_router.post("/edit_menus", name="角色菜单修改")
@@ -96,7 +96,7 @@ async def role_edit_perms(edit_menus: RoleEditMenus, db: Session = Depends(get_d
         role_menu_relation = MenuRoleRelation(**{"role_id": role_id, "menu_id": menu_id})
         db.add(role_menu_relation)
         db.commit()
-    return {"message": "权限修改成功"}
+    return {"message": "菜单权限修改成功"}
 
 
 @role_router.get("/user_lists", response_model=RoleUsers, name="角色下所有成员")

@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from schema.cmdb import CMDBTypeList, CMDBBase
-from models.cmdb.models import CMDBType, CMDBItem
+from schema.cmdb import CMDBTypeList, CMDBBase, CMDBItemBase, CMDBItemList
+from models.cmdb.models import CMDBType, CMDBItem, CMDBRecord
 from models.user.models import User
 from core.db import get_db
 from apis.perm.controller import check_perm
 from sqlalchemy.orm import Session
+from sqlalchemy import and_, or_
 from utils.Record import Record
 from copy import deepcopy
 
@@ -12,7 +13,7 @@ cmdb_router = APIRouter()
 
 
 @cmdb_router.get('/type_list', response_model=CMDBTypeList, name="获取CMDB中所有对象类型")
-def cmdb_type_list(db: Session = Depends(get_db), current_user: User = Depends(check_perm('/cmdb/type_list'))):
+async def cmdb_type_list(db: Session = Depends(get_db), current_user: User = Depends(check_perm('/cmdb/type_list'))):
     cmdb_types = db.query(CMDBType).all()
     return CMDBTypeList(types=[{"type_id": str(cmdb_type.cmdb_type_id), "type_name": cmdb_type.cmdb_type_name,
                                 "type_label": cmdb_type.cmdb_type_label, "type_icon": cmdb_type.cmdb_type_icon} for
@@ -20,8 +21,8 @@ def cmdb_type_list(db: Session = Depends(get_db), current_user: User = Depends(c
 
 
 @cmdb_router.put('/add_type', name="新增CMDB对象类型")
-def cmdb_add_type(new_type: CMDBBase, request: Request, db: Session = Depends(get_db),
-                  current_user: User = Depends(check_perm('/cmdb/add_type'))):
+async def cmdb_add_type(new_type: CMDBBase, request: Request, db: Session = Depends(get_db),
+                        current_user: User = Depends(check_perm('/cmdb/add_type'))):
     # type_name唯一
     old_type = db.query(CMDBType).filter(CMDBType.cmdb_type_name == new_type.type_name).first()
     if old_type:
@@ -35,16 +36,25 @@ def cmdb_add_type(new_type: CMDBBase, request: Request, db: Session = Depends(ge
     return {"message": "类型创建成功"}
 
 
+@cmdb_router.get('/type_info', name="获取CMDB对象属性")
+async def type_info(type_id: str, db: Session = Depends(get_db),
+                    current_user: User = Depends(check_perm('/cmdb/type_info'))):
+    search_type = db.query(CMDBType).filter(CMDBType.cmdb_type_id == int(type_id)).first()
+    if not search_type:
+        raise HTTPException(status_code=406, detail="查询ID不存在")
+    return CMDBBase(type_id=type_id, type_name=search_type.cmdb_type_name, type_label=search_type.cmdb_type_label,
+                    type_icon=search_type.cmdb_type_icon)
+
+
 @cmdb_router.post('/edit_type', name="修改CMDB对象类型")
-def cmdb_edit_type(edit_type: CMDBBase, request: Request, db: Session = Depends(get_db),
-                   current_user: User = Depends(check_perm('/cmdb/edit_type'))):
-    old_type = db.query(CMDBType.cmdb_type_id == int(edit_type.type_id)).first()
+async def cmdb_edit_type(edit_type: CMDBBase, request: Request, db: Session = Depends(get_db),
+                         current_user: User = Depends(check_perm('/cmdb/edit_type'))):
+    old_type = db.query(CMDBType).filter(CMDBType.cmdb_type_id == int(edit_type.type_id)).first()
     if not old_type:
         raise HTTPException(status_code=406, detail="要修改的类型不存在")
     if old_type.cmdb_type_name != edit_type.type_name:
         # 说明修改了类型名，需要判断修改后的类型是否已经存在
-        old_type = db.query(CMDBType.cmdb_type_name == edit_type.type_name).first()
-        if old_type:
+        if db.query(CMDBType).filter(CMDBType.cmdb_type_name == edit_type.type_name).first():
             raise HTTPException(status_code=406, detail="修改的类型已存在")
     old_record = deepcopy(old_type)
     old_type.cmdb_type_name = edit_type.type_name
@@ -59,6 +69,72 @@ def cmdb_edit_type(edit_type: CMDBBase, request: Request, db: Session = Depends(
 
 
 @cmdb_router.get('/get_type_items', name="获取类型下所有的属性")
-def get_type_desc(type_id: str, db: Session = Depends(get_db),
-                  current_user: User = Depends(check_perm('/cmdb/get_type_items'))):
+async def get_type_desc(type_id: str, db: Session = Depends(get_db),
+                        current_user: User = Depends(check_perm('/cmdb/get_type_items'))):
     cmdb_type_items = db.query(CMDBItem).filter(CMDBItem.cmdb_type_id == int(type_id)).all()
+    return CMDBItemList(items=[{"item_id": cmdb_type_item.item_id, "item_label": cmdb_type_item.item_label,
+                                "item_name": cmdb_type_item.item_name} for cmdb_type_item in cmdb_type_items])
+
+
+@cmdb_router.put('/add_type_item', name="新增类型属性")
+async def add_type_desc(request: Request, new_item: CMDBItemBase, db: Session = Depends(get_db),
+                        current_user: User = Depends(check_perm('/cmdb/add_type_item'))):
+    # 确认属性是否重复
+    old_item = db.query(CMDBItem).filter(and_(CMDBItem.cmdb_type_id == new_item.cmdb_type_id,
+                                              or_(CMDBItem.item_name == new_item.item_name,
+                                                  CMDBItem.item_label == new_item.item_label))).first()
+    if old_item:
+        raise HTTPException(status_code=406, detail="此属性已存在")
+    item = CMDBItem(cmdb_type_id=int(new_item.cmdb_type_id), item_name=new_item.item_name,
+                    item_label=new_item.item_label)
+    new_record = deepcopy(item)
+    db.add(item)
+    db.commit()
+    Record.create_operate_record(username=current_user.username, new_object=new_record, ip=request.client.host)
+    return {"message": "属性新增成功"}
+
+
+@cmdb_router.get('/item_info', name="获取类型属性详情")
+def item_info(item_id: str, db: Session = Depends(get_db), current_user: User = Depends(check_perm('/cmdb/item_info'))):
+    item = db.query(CMDBItem).filter(CMDBItem.item_id == int(item_id)).first()
+    if not item:
+        raise HTTPException(status_code=406, detail="查询ID不存在")
+    return CMDBItemBase(item_id=item_id, cmdb_type_id=str(item.cmdb_type_id), item_label=item.item_label,
+                        item_name=item.item_name)
+
+
+@cmdb_router.post('/edit_type_item', name="修改类型属性")
+async def edit_type_item(request: Request, edit_item: CMDBItemBase, db: Session = Depends(get_db),
+                         current_user: User = Depends(check_perm('/cmdb/edit_type_item'))):
+    type_id = int(edit_item.item_id)
+    old_item = db.query(CMDBItem).filter(CMDBItem.item_id == type_id).first()
+    if not old_item:
+        raise HTTPException(status_code=406, detail="要修改的属性不存在")
+    # 判断是否存在
+    if old_item.item_name != edit_item.item_name:
+        if db.query(CMDBItem).filter(and_(CMDBItem.cmdb_type_id == int(edit_item.cmdb_type_id),
+                                          CMDBItem.item_name == edit_item.item_name)).first():
+            raise HTTPException(status_code=406, detail="要修改的属性名已存在")
+    if old_item.item_label != edit_item.item_label:
+        if db.query(CMDBItem).filter(and_(CMDBItem.cmdb_type_id == int(edit_item.cmdb_type_id),
+                                          CMDBItem.item_label == edit_item.item_label)).first():
+            raise HTTPException(status_code=406, detail="要修改的标签名已存在")
+    old_record = deepcopy(old_item)
+    old_item.item_name = edit_item.item_name
+    old_item.item_label = edit_item.item_label
+    new_record = deepcopy(old_item)
+    db.add(old_item)
+    db.commit()
+    Record.create_operate_record(username=current_user.username, new_object=new_record, old_object=old_record,
+                                 ip=request.client.host)
+    return {"message": "属性修改成功"}
+
+
+@cmdb_router.get('/instance_lists', name="模型下实例列表")
+async def instance_lists(type_id: str, db: Session = Depends(get_db),
+                         current_user: User = Depends(check_perm('/cmdb/instance_lists'))):
+    # 获取所有实例
+    instances = db.query(CMDBRecord).filter(CMDBRecord.cmdb_type_id == int(type_id)).all()
+    # 获取类型下面所有属性
+    items = db.query(CMDBItem).filter(CMDBItem.cmdb_type_id == int(type_id)).all()
+    return {"instances": instances, "items": items}

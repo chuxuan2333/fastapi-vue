@@ -5,17 +5,17 @@
       <el-button type="primary" @click="editDialog">修改菜单</el-button>
     </div>
     <el-tree
+      ref="tree"
       :data="menu_lists"
       show-checkbox
       default-expand-all
       node-key="menu_id"
-      ref="tree"
       check-strictly
       highlight-current
       :props="defaultProps"
       @check-change="handleCheckChange"
-    >
-    </el-tree>
+    />
+
     <el-dialog :visible.sync="dialogVisible" :title="dialogTitle">
       <el-form ref="menuForm" :model="selectMenu" :rules="menuRule">
         <el-form-item label="父菜单" prop="parent_id">
@@ -24,13 +24,13 @@
             :options="menu_lists"
             :normalizer="normalizer"
             placeholder="请选择上级菜单,不选择即为根菜单"
-          ></treeselect>
+          />
         </el-form-item>
         <el-form-item label="菜单名" prop="menu_name">
-          <el-input v-model="selectMenu.menu_name"></el-input>
+          <el-input v-model="selectMenu.menu_name" />
         </el-form-item>
         <el-form-item label="前端标识" prop="menu_flag">
-          <el-input v-model="selectMenu.menu_flag"></el-input>
+          <el-input v-model="selectMenu.menu_flag" />
         </el-form-item>
         <el-form-item align="right">
           <el-button @click="resetForm('menuForm')">取 消</el-button>
@@ -103,21 +103,21 @@ export default {
           if (!this.selectMenu.parent_id) this.selectMenu.parent_id = '0'
           if (this.editFlag) {
             editMenu(this.selectMenu).then(response => {
+              this.showMenus()
               this.$message({
                 message: response.message,
                 type: 'success'
               })
               this.dialogVisible = false
-              this.showMenus()
             })
           } else {
             addMenu(this.selectMenu).then(response => {
+              this.showMenus()
               this.$message({
                 message: response.message,
                 type: 'success'
               })
               this.dialogVisible = false
-              this.showMenus()
             })
           }
         } else {
