@@ -62,4 +62,18 @@ export function getInstance(data) {
     params: data
   })
 }
+export function addNewRecord(data) {
+  return request({
+    url: '/cmdb/add_record',
+    method: 'put',
+    data: data
+  })
+}
+export function editOldRecord(data) {
+  return request({
+    url: '/cmdb/edit_record',
+    method: 'post',
+    data: data
+  })
+}
 

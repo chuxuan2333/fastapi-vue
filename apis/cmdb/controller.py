@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 from utils.Record import Record
 from copy import deepcopy
+from typing import Dict
 
 cmdb_router = APIRouter()
 
@@ -135,6 +136,49 @@ async def instance_lists(type_id: str, db: Session = Depends(get_db),
                          current_user: User = Depends(check_perm('/cmdb/instance_lists'))):
     # 获取所有实例
     instances = db.query(CMDBRecord).filter(CMDBRecord.cmdb_type_id == int(type_id)).all()
+    # id转为str
+    for instance in instances:
+        instance.cmdb_record_id = str(instance.cmdb_record_id)
+        instance.cmdb_type_id = str(instance.cmdb_type_id)
     # 获取类型下面所有属性
     items = db.query(CMDBItem).filter(CMDBItem.cmdb_type_id == int(type_id)).all()
     return {"instances": instances, "items": items}
+
+
+@cmdb_router.put('/add_record', name="新增实例")
+async def add_record(request: Request, new_record: Dict[str, str], db: Session = Depends(get_db),
+                     current_user: User = Depends(check_perm('/cmdb/add_record'))):
+    type_id = int(new_record.get("cmdb_type_id", "0"))
+    if type_id == 0:
+        raise HTTPException(status_code=406, detail="请传入cmdb_type_id")
+    # 删除id就是记录详情了
+    del new_record['cmdb_type_id']
+    cmdb_record = CMDBRecord()
+    cmdb_record.cmdb_type_id = type_id
+    cmdb_record.cmdb_record_detail = new_record
+    record = deepcopy(cmdb_record)
+    db.add(cmdb_record)
+    db.commit()
+    Record.create_operate_record(username=current_user.username, new_object=record, ip=request.client.host)
+    return {"message": "实例添加成功"}
+
+
+@cmdb_router.post('/edit_record', name="修改实例")
+async def edit_instance(request: Request, edit_record: Dict[str, str], db: Session = Depends(get_db),
+                        current_user: User = Depends(check_perm('/cmdb/edit_record'))):
+    type_id = int(edit_record.get("cmdb_type_id", "0"))
+    record_id = int(edit_record.get("cmdb_record_id", "0"))
+    if type_id == 0 or record_id == 0:
+        raise HTTPException(status_code=406, detail="请传入id")
+    # 删除id就是记录详情了
+    del edit_record["cmdb_type_id"]
+    del edit_record["cmdb_record_id"]
+    instance = db.query(CMDBRecord).filter(CMDBRecord.cmdb_record_id == record_id).first()
+    old_record = deepcopy(instance)
+    instance.cmdb_record_detail = edit_record
+    new_record = deepcopy(instance)
+    db.add(instance)
+    db.commit()
+    Record.create_operate_record(username=current_user.username, new_object=new_record, old_object=old_record,
+                                 ip=request.client.host)
+    return {"message": "实例修改成功"}

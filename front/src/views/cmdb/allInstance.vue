@@ -11,7 +11,9 @@
       border
       highlight-current-row
     >
-      <el-table-column v-for="item in items" :key="item.item_id" :label="item.item_label" :property="item.item_name" />
+      <el-table-column v-for="item in items" :key="item.item_id" :label="item.item_label">
+        <template slot-scope="scope">{{ scope.row.cmdb_record_detail[item.item_name] }}</template>
+      </el-table-column>
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" circle @click="editDialog(scope.row)" />
@@ -20,9 +22,11 @@
     </el-table>
     <el-dialog :title="title" :visible.sync="dialogVisible">
       <el-form :model="newInstance">
-        <el-form-item v-for="item in items" :key="item.item_id" :label="item.item_label" :prop="item.item_name">
-          <el-input v-model="newInstance[item.item_name]" autocomplete="off" />
-        </el-form-item>
+        <template v-for="item in items">
+          <el-form-item :key="item.item_id" :label="item.item_label" :prop="item.item_name">
+            <el-input v-model="newInstance[item.item_name]" autocomplete="off" />
+          </el-form-item>
+        </template>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -33,7 +37,7 @@
 </template>
 
 <script>
-import { getInstance } from '@/api/cmdb'
+import { getInstance, addNewRecord, editOldRecord } from '@/api/cmdb'
 export default {
   data() {
     return {
@@ -59,10 +63,12 @@ export default {
       this.listLoading = false
     },
     editDialog(row) {
+      row = JSON.parse(JSON.stringify(row))
       this.dialogVisible = true
       this.title = '修改实例'
       this.addFlag = false
-      console.log(row)
+      const editInstance = Object.assign(row.cmdb_record_detail, { cmdb_type_id: this.typeID, cmdb_record_id: row.cmdb_record_id })
+      this.newInstance = editInstance
     },
     addDialog() {
       this.dialogVisible = true
@@ -70,8 +76,32 @@ export default {
       this.newInstance = { cmdb_type_id: this.typeID }
       this.addFlag = true
     },
+    addRecord() {
+      addNewRecord(this.newInstance).then(response => {
+        this.getAllInstance()
+        this.dialogVisible = false
+        this.$message({
+          message: response.message,
+          type: 'success'
+        })
+      })
+    },
+    editRecord() {
+      editOldRecord(this.newInstance).then(response => {
+        this.getAllInstance()
+        this.dialogVisible = false
+        this.$message({
+          message: response.message,
+          type: 'success'
+        })
+      })
+    },
     submitInstance() {
-      console.log(this.newInstance)
+      if (this.addFlag) {
+        this.addRecord()
+      } else {
+        this.editRecord()
+      }
     }
   }
 }
