@@ -16,7 +16,8 @@
       </el-table-column>
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle @click="editDialog(scope.row)" />
+          <el-button type="primary" icon="el-icon-edit" circle size="small" @click="editDialog(scope.row)" />
+          <el-button type="danger" icon="el-icon-delete" circle size="small" @click="deleteInstance(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
@@ -37,7 +38,7 @@
 </template>
 
 <script>
-import { getInstance, addNewRecord, editOldRecord } from '@/api/cmdb'
+import { getInstance, addNewRecord, editOldRecord, deleteRecord } from '@/api/cmdb'
 export default {
   data() {
     return {
@@ -67,8 +68,7 @@ export default {
       this.dialogVisible = true
       this.title = '修改实例'
       this.addFlag = false
-      const editInstance = Object.assign(row.cmdb_record_detail, { cmdb_type_id: this.typeID, cmdb_record_id: row.cmdb_record_id })
-      this.newInstance = editInstance
+      this.newInstance = Object.assign(row.cmdb_record_detail, { cmdb_type_id: this.typeID, cmdb_record_id: row.cmdb_record_id })
     },
     addDialog() {
       this.dialogVisible = true
@@ -102,6 +102,22 @@ export default {
       } else {
         this.editRecord()
       }
+    },
+    deleteInstance(row) {
+      const record_id = row.cmdb_record_id
+      this.$confirm('此操作将删除该条记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteRecord({ record_id: record_id }).then(response => {
+          this.getAllInstance()
+          this.$message({
+            message: response.message,
+            type: 'success'
+          })
+        })
+      })
     }
   }
 }

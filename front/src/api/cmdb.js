@@ -76,4 +76,11 @@ export function editOldRecord(data) {
     data: data
   })
 }
+export function deleteRecord(data) {
+  return request({
+    url: '/cmdb/delete_record',
+    method: 'delete',
+    params: data
+  })
+}
 

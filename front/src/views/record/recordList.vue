@@ -12,7 +12,7 @@
       highlight-current-row
     >
       <el-table-column type="index" :index="indexMethod" width="50" />
-      <el-table-column label="操作对象" prop="operate_object" width="100" />
+      <el-table-column label="操作对象" prop="operate_object" width="150" />
       <el-table-column
         label="操作类型"
         prop="operate_type"
@@ -54,8 +54,7 @@
         :total="pagination.total"
         @current-change="handlePageChange"
         @size-change="handleSizeChange"
-      >
-      </el-pagination>
+      />
     </div>
   </div>
 </template>

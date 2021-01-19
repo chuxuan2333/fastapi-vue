@@ -182,3 +182,16 @@ async def edit_instance(request: Request, edit_record: Dict[str, str], db: Sessi
     Record.create_operate_record(username=current_user.username, new_object=new_record, old_object=old_record,
                                  ip=request.client.host)
     return {"message": "实例修改成功"}
+
+
+@cmdb_router.delete('/delete_record', name="删除记录")
+async def delete_record(request: Request, record_id: str, db: Session = Depends(get_db),
+                        current_user: User = Depends(check_perm('/cmdb/delete_record'))):
+    record = db.query(CMDBRecord).filter(CMDBRecord.cmdb_record_id == int(record_id)).first()
+    if not record:
+        raise HTTPException(status_code=406, detail="要删除的ID不存在")
+    old_record = deepcopy(record)
+    db.delete(record)
+    db.commit()
+    Record.create_operate_record(username=current_user.username, old_object=old_record, ip=request.client.host)
+    return {"message": "记录删除成功"}
