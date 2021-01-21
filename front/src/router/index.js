@@ -148,6 +148,12 @@ export const asyncRoutes = [
         hidden: true,
         component: () => import('@/views/cmdb/allInstance'),
         meta: { title: '所有实例', menu: 'cmdb-all-instance' }
+      },
+      {
+        path: 'web_ssh/:id',
+        hidden: true,
+        component: () => import('@/views/cmdb/webSsh'),
+        meta: { title: '网页终端', menu: 'cmdb-web-ssh' }
       }
     ]
   },

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, WebSocket
 from schema.cmdb import CMDBTypeList, CMDBBase, CMDBItemBase, CMDBItemList
 from models.cmdb.models import CMDBType, CMDBItem, CMDBRecord
 from models.user.models import User
@@ -195,3 +195,11 @@ async def delete_record(request: Request, record_id: str, db: Session = Depends(
     db.commit()
     Record.create_operate_record(username=current_user.username, old_object=old_record, ip=request.client.host)
     return {"message": "记录删除成功"}
+
+
+@cmdb_router.websocket('/web_terminal', name="网页终端")
+async def web_ssh(websocket: WebSocket, db: Session = Depends(get_db)):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_text()
+        await websocket.send_text(f"Message text was: {data}")

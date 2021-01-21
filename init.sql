@@ -89,6 +89,8 @@ INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `parent_id`, `creat_time
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `parent_id`, `creat_time`, `update_time`) VALUES (1349347469275828224, '修改类型', 'cmdb-type-edit', 1349233447075450880, NOW(), NOW());
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `parent_id`, `creat_time`, `update_time`) VALUES (1350980086203027456, '实例', 'cmdb-instance', 1349233447075450880, NOW(), NOW());
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `parent_id`, `creat_time`, `update_time`) VALUES (1350982403165917184, '所有实例', 'cmdb-all-instance', 1349233447075450880, NOW(), NOW());
+INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `parent_id`, `creat_time`, `update_time`) VALUES (1351891602716626944, '网页终端', 'cmdb-web-ssh', 1349233447075450880, NOW(), NOW());
+
 
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514846101504, 1346283931393200128, 1348170310200987648);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1348256514858684416, 1346283931393200128, 1348170732772921344);
@@ -103,6 +105,8 @@ INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1349233969161441280,
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1349347506827431936, 1346283931393200128, 1349347469275828224);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1350980142771605504, 1346283931393200128, 1350980086203027456);
 INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1350982443661922304, 1346283931393200128, 1350982403165917184);
+INSERT INTO `role_menu`(`id`, `role_id`, `menu_id`) VALUES (1351891689106706432, 1346283931393200128, 1351891602716626944);
+
 
 INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349282902902444032, 'mysql', 'cc-mysql', 'MySQL', NOW(), NOW());
 INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349283493586276352, 'kafka', 'cc-kafka', 'Kafka', NOW(), NOW());

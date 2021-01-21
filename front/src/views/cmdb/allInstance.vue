@@ -14,10 +14,21 @@
       <el-table-column v-for="item in items" :key="item.item_id" :label="item.item_label">
         <template slot-scope="scope">{{ scope.row.cmdb_record_detail[item.item_name] }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="100" align="center">
+      <el-table-column label="操作" width="100" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" circle size="small" @click="editDialog(scope.row)" />
           <el-button type="danger" icon="el-icon-delete" circle size="small" @click="deleteInstance(scope.row)" />
+        </template>
+      </el-table-column>
+      <el-table-column v-if="typeID==='1351894051011563520'" fixed="right" width="120" align="center">
+        <template slot-scope="scope">
+          <el-button
+            type="primary"
+            icon="el-icon-s-platform"
+            round
+            size="small"
+            @click="openWebssh(scope.row)"
+          >网页终端</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -118,6 +129,9 @@ export default {
           })
         })
       })
+    },
+    openWebssh(row) {
+      this.$router.push(`/cmdb/web_ssh/${row.cmdb_record_id}`)
     }
   }
 }
