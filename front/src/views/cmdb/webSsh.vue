@@ -28,11 +28,9 @@ export default {
     initTerm() {
       const term = new Terminal({
         rendererType: 'canvas', // 渲染类型
-        rows: 50, // 行数
         convertEol: true, // 启用时，光标将设置为下一行的开头
         scrollback: 10, // 终端中的回滚量
         disableStdin: false, // 是否应禁用输入。
-        cursorStyle: 'underline', // 光标样式
         cursorBlink: true, // 光标闪烁
         theme: {
           foreground: 'yellow', // 字体
@@ -48,14 +46,9 @@ export default {
       fitAddon.fit()
       term.focus()
       this.term = term
-      term.onKey(e => {
-        console.log(e)
-        const ev=e.domEvent
-        if (ev.keyCode)
-      })
     },
     initSocket() {
-      this.socket = new WebSocket(this.socketURI)
+      this.socket = new WebSocket(this.socketURI + '?username=root&password=root123&port=22&ip=10.34.9.123')
       this.socketOnClose()
       this.socketOnOpen()
       this.socketOnError()
@@ -68,7 +61,7 @@ export default {
     },
     socketOnClose() {
       this.socket.onclose = () => {
-        // console.log('close socket')
+        console.log('close socket')
       }
     },
     socketOnError() {

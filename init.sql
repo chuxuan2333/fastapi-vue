@@ -121,4 +121,6 @@ INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmd
 INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349287571687084032, 'printer', 'cc-printer', '打印机', NOW(), NOW());
 INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349287747642331136, 'win-server', 'cc-win7', 'windows服务器', NOW(), NOW());
 INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349287994342903808, 'router', 'cc-router', '路由器', NOW(), NOW());
+INSERT INTO `cmdb_type`(`cmdb_type_id`, `cmdb_type_name`, `cmdb_type_icon`, `cmdb_type_label`, `creat_time`, `update_time`) VALUES (1349534453021675520, 'linux', 'cc-linux', '主机', NOW(), NOW());
+
 

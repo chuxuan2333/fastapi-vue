@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title"> <el-image :src="require(`@/assets/logo.png`)" ></el-image></h3>
+        <h3 class="title"> <el-image :src="require(`@/assets/logo.png`)" /></h3>
       </div>
 
       <el-form-item prop="username">

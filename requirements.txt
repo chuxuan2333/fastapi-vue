@@ -8,3 +8,4 @@ pymysql
 alembic
 cryptography
 psutil
+paramiko

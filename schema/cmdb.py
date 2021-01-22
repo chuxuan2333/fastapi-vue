@@ -22,3 +22,10 @@ class CMDBItemBase(BaseModel):
 
 class CMDBItemList(BaseModel):
     items: List[CMDBItemBase]
+
+
+class ServerInfo(BaseModel):
+    ip: str
+    username: str
+    port: str
+    password: str

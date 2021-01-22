@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, WebSocket
+from fastapi import APIRouter, Depends, HTTPException, Request, WebSocket, status
 from schema.cmdb import CMDBTypeList, CMDBBase, CMDBItemBase, CMDBItemList
 from models.cmdb.models import CMDBType, CMDBItem, CMDBRecord
 from models.user.models import User
@@ -9,6 +9,7 @@ from sqlalchemy import and_, or_
 from utils.Record import Record
 from copy import deepcopy
 from typing import Dict
+import paramiko
 
 cmdb_router = APIRouter()
 
@@ -198,8 +199,36 @@ async def delete_record(request: Request, record_id: str, db: Session = Depends(
 
 
 @cmdb_router.websocket('/web_terminal', name="网页终端")
-async def web_ssh(websocket: WebSocket, db: Session = Depends(get_db)):
+async def web_ssh(websocket: WebSocket, username: str, password: str, ip: str, port: str,
+                  db: Session = Depends(get_db)):
     await websocket.accept()
-    while True:
-        data = await websocket.receive_text()
-        await websocket.send_text(f"Message text was: {data}")
+    # 连接服务器
+    sshclient = paramiko.SSHClient()
+    sshclient.load_system_host_keys()
+    sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    sshclient.connect(ip, int(port), username, password)
+    transport = sshclient.get_transport()
+    chan = transport.open_session()
+    chan.get_pty(term='ansi', width=80, height=24)
+    chan = sshclient.invoke_shell()
+    # 初次连接，有两条信息返回，一个是上次登录信息，一个是默认信息
+    for i in range(2):
+        login_data = chan.recv(2048).decode('utf-8')
+        print(f"login:{login_data}")
+        await websocket.send_text(login_data)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            chan.send(data)
+            result = chan.recv(2048).decode('utf-8')
+            print(f"result:{repr(result)}")
+            await websocket.send_text(result)
+            # 如果是\r\n说明后面要输出上面command的结果，所以要获取两次
+            if result == '\r\n':
+                for i in range(2):
+                    command_result = chan.recv(2048).decode('utf-8')
+                    print(f"command_result:{repr(command_result)}")
+                    await websocket.send_text(command_result)
+    except Exception as ex:
+        print(str(ex))
+        await websocket.close()

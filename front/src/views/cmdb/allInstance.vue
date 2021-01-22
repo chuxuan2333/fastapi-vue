@@ -20,7 +20,7 @@
           <el-button type="danger" icon="el-icon-delete" circle size="small" @click="deleteInstance(scope.row)" />
         </template>
       </el-table-column>
-      <el-table-column v-if="typeID==='1351894051011563520'" fixed="right" width="120" align="center">
+      <el-table-column v-if="typeID==='1349534453021675520'" fixed="right" width="120" align="center">
         <template slot-scope="scope">
           <el-button
             type="primary"
