@@ -10,6 +10,8 @@ from utils.Record import Record
 from copy import deepcopy
 from typing import Dict
 import paramiko
+from threading import Thread
+import asyncio
 
 cmdb_router = APIRouter()
 
@@ -146,7 +148,7 @@ async def instance_lists(type_id: str, db: Session = Depends(get_db),
     return {"instances": instances, "items": items}
 
 
-@cmdb_router.put('/add_record', name="新增实例")
+@cmdb_router.put('/add_record', name="新增记录")
 async def add_record(request: Request, new_record: Dict[str, str], db: Session = Depends(get_db),
                      current_user: User = Depends(check_perm('/cmdb/add_record'))):
     type_id = int(new_record.get("cmdb_type_id", "0"))
@@ -164,7 +166,7 @@ async def add_record(request: Request, new_record: Dict[str, str], db: Session =
     return {"message": "实例添加成功"}
 
 
-@cmdb_router.post('/edit_record', name="修改实例")
+@cmdb_router.post('/edit_record', name="修改记录")
 async def edit_instance(request: Request, edit_record: Dict[str, str], db: Session = Depends(get_db),
                         current_user: User = Depends(check_perm('/cmdb/edit_record'))):
     type_id = int(edit_record.get("cmdb_type_id", "0"))
@@ -198,37 +200,49 @@ async def delete_record(request: Request, record_id: str, db: Session = Depends(
     return {"message": "记录删除成功"}
 
 
+@cmdb_router.get('/record_details/{record_id}', name="获取记录详情")
+async def get_record_details(record_id: str, db: Session = Depends(get_db),
+                             current_user: User = Depends(check_perm('/cmdb/record_details'))):
+    record_item = db.query(CMDBRecord).filter(CMDBRecord.cmdb_record_id == int(record_id)).first()
+    if not record_item:
+        raise HTTPException(status_code=406, detail="此ID信息不存在")
+    return {"message": "ok", "record_details": record_item.cmdb_record_detail}
+
+
 @cmdb_router.websocket('/web_terminal', name="网页终端")
 async def web_ssh(websocket: WebSocket, username: str, password: str, ip: str, port: str,
                   db: Session = Depends(get_db)):
     await websocket.accept()
     # 连接服务器
-    sshclient = paramiko.SSHClient()
-    sshclient.load_system_host_keys()
-    sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    sshclient.connect(ip, int(port), username, password)
-    transport = sshclient.get_transport()
+    ssh_client = paramiko.SSHClient()
+    ssh_client.load_system_host_keys()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh_client.connect(ip, int(port), username, password)
+    transport = ssh_client.get_transport()
     chan = transport.open_session()
-    chan.get_pty(term='ansi', width=80, height=24)
-    chan = sshclient.invoke_shell()
+    chan.get_pty(term='ansi', width=80, height=40)
+    chan = ssh_client.invoke_shell()
+
+    async def send_ssh():
+        try:
+            while True:
+                result = chan.recv(2048).decode('utf-8')
+                await websocket.send_text(result)
+        except Exception:
+            pass
+
     # 初次连接，有两条信息返回，一个是上次登录信息，一个是默认信息
     for i in range(2):
         login_data = chan.recv(2048).decode('utf-8')
-        print(f"login:{login_data}")
         await websocket.send_text(login_data)
+    # 启动多线程接收ssh返回的信息
+    Thread(target=asyncio.run, args=(send_ssh(),)).start()
+    Thread(target=asyncio.run, args=(send_ssh(),)).start()
     try:
         while True:
             data = await websocket.receive_text()
             chan.send(data)
-            result = chan.recv(2048).decode('utf-8')
-            print(f"result:{repr(result)}")
-            await websocket.send_text(result)
-            # 如果是\r\n说明后面要输出上面command的结果，所以要获取两次
-            if result == '\r\n':
-                for i in range(2):
-                    command_result = chan.recv(2048).decode('utf-8')
-                    print(f"command_result:{repr(command_result)}")
-                    await websocket.send_text(command_result)
     except Exception as ex:
-        print(str(ex))
+        print(f"websocket closed:{str(ex)}")
         await websocket.close()
+        ssh_client.close()

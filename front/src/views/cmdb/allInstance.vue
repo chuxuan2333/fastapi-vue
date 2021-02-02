@@ -131,7 +131,7 @@ export default {
       })
     },
     openWebssh(row) {
-      this.$router.push(`/cmdb/web_ssh/${row.cmdb_record_id}`)
+      window.open(`/#/cmdb/web_ssh/${row.cmdb_record_id}`)
     }
   }
 }

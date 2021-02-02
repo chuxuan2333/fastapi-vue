@@ -83,4 +83,11 @@ export function deleteRecord(data) {
     params: data
   })
 }
+export function getRecordDetail(data) {
+  return request({
+    url: `/cmdb/record_details/${data}`,
+    method: 'get'
+  })
+
+}
 

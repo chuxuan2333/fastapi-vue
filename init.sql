@@ -40,6 +40,7 @@ INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`,
 INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1351171013605462016, 'cmdb新增记录', '/cmdb/add_record', NOW(), NOW());
 INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1351171107306213376, 'cmdb修改记录', '/cmdb/edit_record', NOW(), NOW());
 INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1351344606725410816, 'cmdb删除记录', '/cmdb/delete_record', NOW(), NOW());
+INSERT INTO `permission`(`perm_id`, `perm_name`, `perm_interface`, `creat_time`, `update_time`) VALUES (1356504832885788672, '获取cmdb记录详情', '/cmdb/record_details', NOW(), NOW());
 
 INSERT INTO `role`(`role_id`, `role_name`, `role_desc`, `creat_time`, `update_time`) VALUES (1346283931393200128, '管理员', '系统管理员', NOW(), NOW());
 INSERT INTO `role_user`(`id`, `role_id`, `user_id`) VALUES (1346283973071998976, 1346283931393200128, 1334394783375953920);
@@ -75,6 +76,7 @@ INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1351092183565996032,
 INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1351171668248236032, 1346283931393200128, 1351171013605462016);
 INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1351171668256624640, 1346283931393200128, 1351171107306213376);
 INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1351344650434252800, 1346283931393200128, 1351344606725410816);
+INSERT INTO `role_perm`(`id`, `role_id`, `perm_id`) VALUES (1356504870244454400, 1346283931393200128, 1356504832885788672);
 
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_time`, `parent_id`) VALUES (1348170310200987648, '系统管理', 'system-manage', NOW(), NOW(), 0);
 INSERT INTO `menu`(`menu_id`, `menu_name`, `menu_flag`, `creat_time`, `update_time`, `parent_id`) VALUES (1348170732772921344, '用户管理', 'user-manage', NOW(), NOW(), 1348170310200987648);
