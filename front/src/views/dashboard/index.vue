@@ -26,9 +26,9 @@ export default {
       this.tipMessage = '夜深了,早点下班~明天继续加油😘'
     } else if (currentHour >= 11 && currentHour < 13) {
       this.tipMessage = '中午好,午饭吃什么想好了吗?🤣'
-    } else if (currentHour >= 13 && currentHour <= 16) {
+    } else if (currentHour >= 13 && currentHour <= 15) {
       this.tipMessage = '下午好,早上效率如何?今天的计划能完成吗😃'
-    } else if (currentHour >= 17 && currentHour <= 18) {
+    } else if (currentHour >= 16 && currentHour <= 18) {
       this.tipMessage = '傍晚好,今天是按时下班还是加班呢🤪'
     } else if (currentHour >= 19 && currentHour <= 21) {
       this.tipMessage = '晚上好,加班辛苦啦~加油🤞'

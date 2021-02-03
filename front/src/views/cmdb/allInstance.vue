@@ -31,6 +31,17 @@
           >网页终端</el-button>
         </template>
       </el-table-column>
+      <el-table-column v-else-if="typeID==='1349287493794664448'" fixed="right" width="120" align="center">
+        <template slot-scope="scope">
+          <el-button
+            type="primary"
+            icon="el-icon-s-platform"
+            round
+            size="small"
+            @click="openReport(scope.row)"
+          >查看报表</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-dialog :title="title" :visible.sync="dialogVisible">
       <el-form :model="newInstance">
@@ -132,6 +143,9 @@ export default {
     },
     openWebssh(row) {
       window.open(`/#/cmdb/web_ssh/${row.cmdb_record_id}`)
+    },
+    openReport(row) {
+      window.open(row.cmdb_record_detail.report)
     }
   }
 }
