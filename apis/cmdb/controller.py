@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, WebSocket, status
+from fastapi import APIRouter, Depends, HTTPException, Request, WebSocket, File, UploadFile
 from schema.cmdb import CMDBTypeList, CMDBBase, CMDBItemBase, CMDBItemList
 from models.cmdb.models import CMDBType, CMDBItem, CMDBRecord
 from models.user.models import User
 from core.db import get_db
+from core.config import Settings
 from apis.perm.controller import check_perm
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
@@ -12,6 +13,9 @@ from typing import Dict
 import paramiko
 from threading import Thread
 import asyncio
+import time
+import os
+from utils.Excel import Excel
 
 cmdb_router = APIRouter()
 
@@ -156,6 +160,8 @@ async def add_record(request: Request, new_record: Dict[str, str], db: Session =
         raise HTTPException(status_code=406, detail="请传入cmdb_type_id")
     # 删除id就是记录详情了
     del new_record['cmdb_type_id']
+    if new_record == {}:
+        raise HTTPException(status_code=406, detail="未传入记录详情")
     cmdb_record = CMDBRecord()
     cmdb_record.cmdb_type_id = type_id
     cmdb_record.cmdb_record_detail = new_record
@@ -164,6 +170,41 @@ async def add_record(request: Request, new_record: Dict[str, str], db: Session =
     db.commit()
     Record.create_operate_record(username=current_user.username, new_object=record, ip=request.client.host)
     return {"message": "实例添加成功"}
+
+
+@cmdb_router.post('/import_record/{type_id}', name="导入记录")
+async def import_record(request: Request, type_id: str, file: UploadFile = File(...), db: Session = Depends(get_db),
+                        current_user: User = Depends(check_perm('/cmdb/import_record'))):
+    # 获取用户上传的文件并存储，命名规则:{type_name}-{username}-{时间戳}
+    type_id = int(type_id)
+    cmdb_type = db.query(CMDBType).filter(CMDBType.cmdb_type_id == type_id).first()
+    if not cmdb_type:
+        raise HTTPException(status_code=406, detail="上传的类型不存在")
+    # 上传文件必须为Excel
+    if not file.content_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+        raise HTTPException(status_code=406, detail="请上传Excel文件")
+    cmdb_type_name = cmdb_type.cmdb_type_name
+    total_miles = str(int(round(time.time() * 1000)))
+    store_filename = f"{cmdb_type_name}-{total_miles}-{file.filename}"
+    content = await file.read()
+    # 保存用户上传的文件
+    with open(os.path.join(Settings.UPLOAD_FOLDER, store_filename), "wb+") as f:
+        f.write(content)
+    # 解析Excel
+    excel = Excel(filepath=os.path.join(Settings.UPLOAD_FOLDER, store_filename))
+    all_records = excel.import_cmdb_record()
+    if len(all_records) == 0:
+        raise HTTPException(status_code=406, detail="请填入具体数据")
+    # record插入数据库
+    for record in all_records:
+        cmdb_record = CMDBRecord()
+        cmdb_record.cmdb_type_id = type_id
+        cmdb_record.cmdb_record_detail = record
+        new_record = deepcopy(cmdb_record)
+        db.add(cmdb_record)
+        db.commit()
+        Record.create_operate_record(username=current_user.username, new_object=new_record, ip=request.client.host)
+    return {"all_records": all_records}
 
 
 @cmdb_router.post('/edit_record', name="修改记录")
@@ -240,6 +281,7 @@ async def web_ssh(websocket: WebSocket, username: str, password: str, ip: str, p
     Thread(target=asyncio.run, args=(send_ssh(),)).start()
     try:
         while True:
+            # 监听前端传递的信息，传送给ssh
             data = await websocket.receive_text()
             chan.send(data)
     except Exception as ex:

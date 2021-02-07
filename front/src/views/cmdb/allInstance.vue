@@ -2,6 +2,35 @@
   <div class="app-container">
     <div>
       <el-button type="primary" @click="addDialog">新增实例</el-button>
+      <el-button type="success" @click="drawer=true">导入实例</el-button>
+      <el-drawer
+        title="实例导入"
+        :visible.sync="drawer"
+        :before-close="handleClose"
+      >
+        <div align="center">
+          <el-upload
+            ref="upload"
+            drag
+            action="#"
+            accept=".xlsx"
+            :auto-upload="false"
+            :before-upload="beforeUpload"
+            :http-request="uploadExcel"
+            :limit="1"
+            :on-exceed="handleExceed"
+            multiple
+          >
+            <i class="el-icon-upload" />
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div slot="tip" class="el-upload__tip">只能上传Excel文件，且不超过10M</div>
+          </el-upload>
+          <div align="right" style="margin-right: 10px">
+            <el-button type="primary" @click="submitUpload">上 传</el-button>
+          </div>
+        </div>
+
+      </el-drawer>
     </div>
     <el-table
       v-loading="listLoading"
@@ -61,6 +90,7 @@
 
 <script>
 import { getInstance, addNewRecord, editOldRecord, deleteRecord } from '@/api/cmdb'
+import request from '@/utils/request'
 export default {
   data() {
     return {
@@ -71,7 +101,8 @@ export default {
       items: [],
       typeID: this.$route.params.id,
       newInstance: { cmdb_type_id: this.$route.params.id },
-      addFlag: true
+      addFlag: true,
+      drawer: false
     }
   },
   created() {
@@ -146,7 +177,52 @@ export default {
     },
     openReport(row) {
       window.open(row.cmdb_record_detail.report)
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          this.$refs.upload.clearFiles()
+          done()
+        })
+        .catch(_ => {})
+    },
+    beforeUpload(file) {
+      const isEXCEL = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      const isLt10M = file.size / 1024 / 1024 < 10
+      if (!isEXCEL) {
+        this.$message.error('上传文件只能是 Excel 格式!')
+      }
+      if (!isLt10M) {
+        this.$message.error('上传文件大小不能超过 10MB!')
+      }
+      return isEXCEL && isLt10M
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning('只能上传一个文件')
+    },
+    uploadExcel(param) {
+      const formData = new FormData()
+      formData.append('file', param.file)
+      formData.append('uploadType', param.file.type)
+      request({
+        url: `/cmdb/import_record/${this.typeID}`,
+        method: 'post',
+        data: formData
+      }).then(response => {
+        param.onSuccess()
+        this.$message.success('导入成功')
+        this.getAllInstance()
+      })
+    },
+    submitUpload() {
+      this.$refs.upload.submit()
     }
   }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss">
+   :focus{
+        outline:0;
+    }
+</style>

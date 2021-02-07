@@ -9,3 +9,5 @@ alembic
 cryptography
 psutil
 paramiko
+openpyxl
+pandas
