@@ -13,6 +13,7 @@ if settings.BACKEND_CORS_ORIGINS:
                        allow_credentials=True,
                        allow_methods=["*"],
                        allow_headers=["*"],
+                       expose_headers=["Content-Disposition"]
                        )
 # 路由注册
 app.include_router(api_router, prefix=settings.API_PREFIX)

@@ -3,6 +3,7 @@
     <div>
       <el-button type="primary" @click="addDialog">新增实例</el-button>
       <el-button type="success" @click="drawer=true">导入实例</el-button>
+      <el-input v-model="search" style="width: 20%;float: right;margin-right: 5%" placeholder="请输入搜索信息" prefix-icon="el-icon-search" @change="getAllInstance" />
       <el-drawer
         title="实例导入"
         :visible.sync="drawer"
@@ -25,6 +26,10 @@
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
             <div slot="tip" class="el-upload__tip">只能上传Excel文件，且不超过10M</div>
           </el-upload>
+          <br>
+          <div>
+            <el-link type="success" :href="downloadUrl" :download="fileName">点击下载模板<i class="el-icon-download el-icon--left" /> </el-link>
+          </div>
           <div align="right" style="margin-right: 10px">
             <el-button type="primary" @click="submitUpload">上 传</el-button>
           </div>
@@ -72,6 +77,20 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="block">
+      <el-pagination
+        class="mt-20 text-right"
+        align="right"
+        :hide-on-single-page="hidePage"
+        background
+        layout="total,sizes,prev,pager,next,jumper"
+        :current-page.sync="pagination.currentPage"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
+        @current-change="handlePageChange"
+        @size-change="handleSizeChange"
+      />
+    </div>
     <el-dialog :title="title" :visible.sync="dialogVisible">
       <el-form :model="newInstance">
         <template v-for="item in items">
@@ -89,8 +108,10 @@
 </template>
 
 <script>
-import { getInstance, addNewRecord, editOldRecord, deleteRecord } from '@/api/cmdb'
+import { addNewRecord, deleteRecord, editOldRecord, getInstance } from '@/api/cmdb'
 import request from '@/utils/request'
+import axios from 'axios'
+import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
@@ -102,19 +123,45 @@ export default {
       typeID: this.$route.params.id,
       newInstance: { cmdb_type_id: this.$route.params.id },
       addFlag: true,
-      drawer: false
+      drawer: false,
+      downloadUrl: '',
+      fileName: '',
+      pagination: {
+        currentPage: 1,
+        total: 0,
+        pageSize: 10
+      },
+      search: ''
     }
   },
   created() {
     this.getAllInstance()
+    this.downloadTml()
   },
   methods: {
     getAllInstance() {
-      getInstance({ 'type_id': this.typeID }).then(response => {
+      this.listLoading = true
+      const { pagination } = this
+      getInstance({ 'type_id': this.typeID, 'page_no': pagination.currentPage, 'page_size': pagination.pageSize, 'search_str': this.search }).then(response => {
         this.instances = response.instances
         this.items = response.items
+        this.pagination.total = response.total
       })
       this.listLoading = false
+    },
+    handlePageChange() {
+      // table改变, 重新加载数据
+      this.getAllInstance()
+    },
+    handleSizeChange(newPageSize) {
+      // 页数大小改变
+      const { pagination } = this
+      pagination.pageSize = newPageSize
+      this.handlePageChange(pagination.currentPage = 1)
+    },
+    indexMethod(index) {
+      // 索引改变
+      return index + (this.pagination.currentPage - 1) * this.pagination.pageSize + 1
     },
     editDialog(row) {
       row = JSON.parse(JSON.stringify(row))
@@ -216,6 +263,21 @@ export default {
     },
     submitUpload() {
       this.$refs.upload.submit()
+    },
+    downloadTml() {
+      axios({
+        url: `${process.env.VUE_APP_BASE_API}/cmdb/create_cmdb_template/${this.typeID}`,
+        headers: {
+          'accept': 'application/json',
+          'Authorization': 'Bearer ' + getToken()
+        },
+        method: 'get',
+        responseType: 'blob'
+      }).then(response => {
+        this.fileName = window.decodeURI(response.headers['content-disposition'].split('=')[1].split('\'\'')[1], 'UTF-8')
+        const blob = new Blob([response.data], { type: response.headers['content-type'] })
+        this.downloadUrl = URL.createObjectURL(blob)
+      })
     }
   }
 }

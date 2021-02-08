@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, WebSocket, File, UploadFile
+from fastapi.responses import FileResponse
 from schema.cmdb import CMDBTypeList, CMDBBase, CMDBItemBase, CMDBItemList
 from models.cmdb.models import CMDBType, CMDBItem, CMDBRecord
 from models.user.models import User
@@ -6,7 +7,7 @@ from core.db import get_db
 from core.config import Settings
 from apis.perm.controller import check_perm
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, func
 from utils.Record import Record
 from copy import deepcopy
 from typing import Dict
@@ -139,17 +140,27 @@ async def edit_type_item(request: Request, edit_item: CMDBItemBase, db: Session 
 
 
 @cmdb_router.get('/instance_lists', name="模型下实例列表")
-async def instance_lists(type_id: str, db: Session = Depends(get_db),
+async def instance_lists(type_id: str, page_no: int, page_size: int, search_str: str = '',
+                         db: Session = Depends(get_db),
                          current_user: User = Depends(check_perm('/cmdb/instance_lists'))):
     # 获取所有实例
-    instances = db.query(CMDBRecord).filter(CMDBRecord.cmdb_type_id == int(type_id)).all()
-    # id转为str
-    for instance in instances:
-        instance.cmdb_record_id = str(instance.cmdb_record_id)
-        instance.cmdb_type_id = str(instance.cmdb_type_id)
+    if search_str:
+        total = db.query(func.count(CMDBRecord.cmdb_record_id)).filter(and_(CMDBRecord.cmdb_type_id == int(type_id),
+                                                                            CMDBRecord.cmdb_record_detail.like(
+                                                                                f"%{search_str}%"))).scalar()
+        instances = db.query(CMDBRecord).filter(
+            and_(CMDBRecord.cmdb_type_id == int(type_id), CMDBRecord.cmdb_record_detail.like(f"%{search_str}%"))).slice(
+            page_size * (page_no - 1), page_size * page_no)
+    else:
+        total = db.query(func.count(CMDBRecord.cmdb_record_id)).filter(CMDBRecord.cmdb_type_id == int(type_id)).scalar()
+        print(total)
+        instances = db.query(CMDBRecord).filter(CMDBRecord.cmdb_type_id == int(type_id)).slice(
+            page_size * (page_no - 1), page_size * page_no)
     # 获取类型下面所有属性
     items = db.query(CMDBItem).filter(CMDBItem.cmdb_type_id == int(type_id)).all()
-    return {"instances": instances, "items": items}
+    return {"total": total, "instances": [
+        {"cmdb_record_id": str(instance.cmdb_record_id), "cmdb_type_id": str(instance.cmdb_type_id),
+         "cmdb_record_detail": instance.cmdb_record_detail} for instance in instances], "items": items}
 
 
 @cmdb_router.put('/add_record', name="新增记录")
@@ -170,6 +181,25 @@ async def add_record(request: Request, new_record: Dict[str, str], db: Session =
     db.commit()
     Record.create_operate_record(username=current_user.username, new_object=record, ip=request.client.host)
     return {"message": "实例添加成功"}
+
+
+@cmdb_router.get('/create_cmdb_template/{type_id}', name="下载cmdb模板")
+async def create_cmdb_template(type_id: str, db: Session = Depends(get_db),
+                               current_user: User = Depends(check_perm('/cmdb/create_cmdb_template'))):
+    type_id = int(type_id)
+    cmdb_type = db.query(CMDBType).filter(CMDBType.cmdb_type_id == type_id).first()
+    if not cmdb_type:
+        raise HTTPException(status_code=406, detail="上传的类型不存在")
+    # 获取所有属性
+    cmdb_items = db.query(CMDBItem.item_name).filter(CMDBItem.cmdb_type_id == type_id).all()
+    keys = [cmdb_item.item_name for cmdb_item in cmdb_items]
+    # 文件命名规则: {type_name}模板.xlsx
+    filename = f"{cmdb_type.cmdb_type_name}模板.xlsx"
+    filepath = os.path.join(Settings.CMDB_FOLDER, filename)
+    excel = Excel(filepath=filepath)
+    # 根据最新数据生成模板
+    excel.create_cmdb_template(keys=keys)
+    return FileResponse(filepath, filename=filename)
 
 
 @cmdb_router.post('/import_record/{type_id}', name="导入记录")
