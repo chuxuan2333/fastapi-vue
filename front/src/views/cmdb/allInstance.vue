@@ -23,7 +23,7 @@
             multiple
           >
             <i class="el-icon-upload" />
-            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击此处上传</em></div>
             <div slot="tip" class="el-upload__tip">只能上传Excel文件，且不超过10M</div>
           </el-upload>
           <br>
@@ -117,6 +117,7 @@ export default {
     return {
       listLoading: true,
       dialogVisible: false,
+      hidePage: false,
       title: '新增实例',
       instances: [],
       items: [],
@@ -262,6 +263,7 @@ export default {
       })
     },
     submitUpload() {
+      console.log(this.$refs.upload['file-list'])
       this.$refs.upload.submit()
     },
     downloadTml() {

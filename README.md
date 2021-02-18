@@ -87,3 +87,31 @@ npm run dev
 
 #### 菜单管理
 ![menu](asserts/menu.png)
+
+#### 操作记录
+![record](asserts/record.png)
+
+#### cmdb模型管理
+![cmdb_List](asserts/cmdbList.png)
+##### cmdb新增模型
+![cmdb_type_add](asserts/cmdb_add_type.png)
+
+点击模型可以查看修改属性
+##### cmdb模型属性
+![cmdb_type_item](asserts/cmdb_type_item.png)
+
+#### cmdb实例管理
+![cmdb_instance](asserts/cmdb_instance.png)
+
+点击可以查看类型下所有录入实例
+##### cmdb实例详情
+![cmdb_instance_detail](asserts/cmdb_instance_lists.png)
+##### 数据录入
+![cmdb_add_instance](asserts/cmdb_add_instance.png)
+
+可以通过Excel进行批量导入
+![cmdb_import](asserts/cmdb_import.png)
+
+针对Linux服务器提供web terminal功能
+![cmdb_terminal](asserts/web_terminal.png)
+![terminal_detail](asserts/terminal_detail.png)
