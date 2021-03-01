@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div>
-      <el-button type="primary" @click="addVisible=true">新增角色</el-button>
+      <el-button type="primary" @click="addVisible=true,newRole={}">新增角色</el-button>
     </div>
     <el-table
       v-loading="listLoading"

@@ -48,7 +48,7 @@
       <el-table-column v-for="item in items" :key="item.item_id" :label="item.item_label">
         <template slot-scope="scope">{{ scope.row.cmdb_record_detail[item.item_name] }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="100" fixed="right" align="center">
+      <el-table-column v-if="editPerm" label="操作" width="100" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" circle size="small" @click="editDialog(scope.row)" />
           <el-button type="danger" icon="el-icon-delete" circle size="small" @click="deleteInstance(scope.row)" />
@@ -121,6 +121,7 @@ export default {
       title: '新增实例',
       instances: [],
       items: [],
+      editPerm: false,
       typeID: this.$route.params.id,
       newInstance: { cmdb_type_id: this.$route.params.id },
       addFlag: true,

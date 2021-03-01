@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="search">
-      <el-button type="primary" style="margin-left: 2%" @click="addUser">新增用户</el-button>
+      <el-button type="primary" @click="addUser">新增用户</el-button>
       <el-input v-model="search" style="width: 20%;float: right;margin-right: 5%" placeholder="请输入搜索用户名" prefix-icon="el-icon-search" @change="fetchData" />
     </div>
     <el-table

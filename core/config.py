@@ -22,11 +22,11 @@ class Settings:
     # 是否热加载
     RELOAD = True
     # 上传文件存储位置
-    UPLOAD_FOLDER = "F:\\code\\upload_files"
+    UPLOAD_FOLDER = "D:\\code\\upload_files"
     if not os.path.exists(UPLOAD_FOLDER):
         os.mkdir(UPLOAD_FOLDER)
     # CMDB模板文件存储位置
-    CMDB_FOLDER = "F:\\code\\cmdb_files"
+    CMDB_FOLDER = "D:\\code\\cmdb_files"
     if not os.path.exists(CMDB_FOLDER):
         os.mkdir(CMDB_FOLDER)
 
