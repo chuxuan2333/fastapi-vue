@@ -121,7 +121,7 @@ export default {
       title: '新增实例',
       instances: [],
       items: [],
-      editPerm: false,
+      editPerm: true,
       typeID: this.$route.params.id,
       newInstance: { cmdb_type_id: this.$route.params.id },
       addFlag: true,
