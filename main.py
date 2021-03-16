@@ -5,7 +5,11 @@ from apis.apis import api_router
 import uvicorn
 
 # 初始化app实例
-app = FastAPI(title=settings.APP_NAME, openapi_url=f"{settings.API_PREFIX}/openapi.json")
+if settings.ENV == "PROD":
+    # 生产关闭swagger
+    app = FastAPI(title=settings.APP_NAME,docs_url=None,redoc_url=None)
+else:
+    app = FastAPI(title=settings.APP_NAME, openapi_url=f"{settings.API_PREFIX}/openapi.json")
 # 设置CORS站点
 if settings.BACKEND_CORS_ORIGINS:
     app.add_middleware(CORSMiddleware,

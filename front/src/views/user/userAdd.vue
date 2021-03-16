@@ -65,9 +65,6 @@ export default {
       }
     }
   },
-  created() {
-
-  },
   methods: {
     cancel() {
       this.$router.go(-1)

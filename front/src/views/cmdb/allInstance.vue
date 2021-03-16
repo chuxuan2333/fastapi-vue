@@ -46,7 +46,16 @@
       highlight-current-row
     >
       <el-table-column v-for="item in items" :key="item.item_id" :label="item.item_label">
-        <template slot-scope="scope">{{ scope.row.cmdb_record_detail[item.item_name] }}</template>
+        <template slot-scope="scope">
+          <div v-if="tagFlag(item.item_name) && scope.row.cmdb_record_detail[item.item_name]">
+            <el-tag v-for="info in scope.row.cmdb_record_detail[item.item_name].split(';')" :key="info">
+              {{ info }}
+            </el-tag>
+          </div>
+          <span v-else>
+            {{ scope.row.cmdb_record_detail[item.item_name] }}
+          </span>
+        </template>
       </el-table-column>
       <el-table-column v-if="editPerm" label="操作" width="100" fixed="right" align="center">
         <template slot-scope="scope">
@@ -116,6 +125,7 @@ export default {
   data() {
     return {
       listLoading: true,
+      show: false,
       dialogVisible: false,
       hidePage: false,
       title: '新增实例',
@@ -141,6 +151,11 @@ export default {
     this.downloadTml()
   },
   methods: {
+    tagFlag(name) {
+      const tagNames = ['services', 'project', 'outer_ports', 'owner']
+      // 如果在list内就用tag显示
+      return tagNames.indexOf(name) >= 0
+    },
     getAllInstance() {
       this.listLoading = true
       const { pagination } = this
@@ -149,6 +164,7 @@ export default {
         this.items = response.items
         this.pagination.total = response.total
       })
+      this.show = true
       this.listLoading = false
     },
     handlePageChange() {
@@ -264,7 +280,6 @@ export default {
       })
     },
     submitUpload() {
-      console.log(this.$refs.upload['file-list'])
       this.$refs.upload.submit()
     },
     downloadTml() {

@@ -153,7 +153,6 @@ async def instance_lists(type_id: str, page_no: int, page_size: int, search_str:
             page_size * (page_no - 1), page_size * page_no)
     else:
         total = db.query(func.count(CMDBRecord.cmdb_record_id)).filter(CMDBRecord.cmdb_type_id == int(type_id)).scalar()
-        print(total)
         instances = db.query(CMDBRecord).filter(CMDBRecord.cmdb_type_id == int(type_id)).slice(
             page_size * (page_no - 1), page_size * page_no)
     # 获取类型下面所有属性

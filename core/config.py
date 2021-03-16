@@ -2,10 +2,9 @@ from pydantic import AnyHttpUrl
 from typing import List
 import os
 
-ENV = os.environ.get("fast_env", "DEV")  # 本次启动环境
-
 
 class Settings:
+    ENV = os.environ.get("fast_env", "DEV")  # 本次启动环境
     APP_NAME = "fastapi-vue-admin"
     # api前缀
     API_PREFIX = "/api"

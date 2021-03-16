@@ -4,3 +4,5 @@ __pycache__/
 alembic/
 alembic.ini
 venv/
+cmdb_files/
+upload_files/

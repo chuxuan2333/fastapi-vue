@@ -34,7 +34,6 @@ export default {
       // 通过id去获取服务器信息
       await getRecordDetail(this.$route.params.id).then(response => {
         this.recordInfo = response.record_details
-        console.log(this.recordInfo)
       })
     },
     initTerm() {

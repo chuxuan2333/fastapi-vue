@@ -28,7 +28,7 @@ async def me(user: User = Depends(get_current_active_user), db: Session = Depend
 
 @user_router.get("/get_user_info", response_model=UserBase, name="获取指定用户详情")
 async def get_user_info(username: str, db: Session = Depends(get_db),
-                  current_user: User = Depends(check_perm('/users/get_user_info'))):
+                        current_user: User = Depends(check_perm('/users/get_user_info'))):
     user = db.query(User).filter(User.username == username).first()
     if user:
         user_dict = {"username": user.username, "email": user.email, "is_active": user.is_active,
@@ -40,7 +40,7 @@ async def get_user_info(username: str, db: Session = Depends(get_db),
 
 @user_router.get("/all_users", response_model=AllUser, name="获取所有用户")
 async def all_users(page_no: int, page_size: int, search_username: str = '', db: Session = Depends(get_db),
-              current_user: User = Depends(check_perm('/users/all_users'))):
+                    current_user: User = Depends(check_perm('/users/all_users'))):
     # 分页查询,前端需要传递页数,和每页多少个
     # 数据分页与list切片格式保持一致
     if search_username:
@@ -58,7 +58,8 @@ async def all_users(page_no: int, page_size: int, search_username: str = '', db:
 
 @user_router.put("/create_user", responses={406: {"description": "创建的用户已经存在"}}, name="创建新用户")
 async def create_user(user: NewUser, request: Request, db: Session = Depends(get_db),
-                current_user: User = Depends(check_perm('/users/create_user'))):
+                      current_user: User = Depends(check_perm('/users/create_user'))):
+    # Astro系统增加用户
     old_user = db.query(User).filter(or_(User.username == user.username, User.email == user.email)).first()
     if old_user:
         raise HTTPException(status_code=406, detail="创建的用户已经存在")
@@ -76,7 +77,7 @@ async def create_user(user: NewUser, request: Request, db: Session = Depends(get
 
 @user_router.post("/update_user", name="更新用户信息")
 async def update_user(request: Request, modify_user: ModifyUser, db: Session = Depends(get_db),
-                current_user: User = Depends(check_perm('/users/update_user'))):
+                      current_user: User = Depends(check_perm('/users/update_user'))):
     """
     用户名不可以修改
     """
