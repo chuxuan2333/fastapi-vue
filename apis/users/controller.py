@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_, func
 from schema.user import UserBase, NewUser, AllUser, ModifyUser
 from utils.Record import Record
+from core.config import settings
 
 user_router = APIRouter()
 
@@ -62,6 +63,7 @@ async def create_user(user: NewUser, request: Request, db: Session = Depends(get
     # Astro系统增加用户
     old_user = db.query(User).filter(or_(User.username == user.username, User.email == user.email)).first()
     if old_user:
+        settings.logger.warning(f"创建{user.username}用户已经存在")
         raise HTTPException(status_code=406, detail="创建的用户已经存在")
     user_dict = {"username": user.username, "email": user.email, "nick_name": user.nick_name,
                  "is_active": user.is_active}

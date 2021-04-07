@@ -1,5 +1,7 @@
 from pydantic import AnyHttpUrl
 from typing import List
+from loguru import logger
+import time
 import os
 
 
@@ -28,5 +30,13 @@ class Settings:
     CMDB_FOLDER = "D:\\code\\cmdb_files"
     if not os.path.exists(CMDB_FOLDER):
         os.mkdir(CMDB_FOLDER)
+    # 日志收集器
+    LOG_FOLDER = "D:\\code\\fastapi-logs"
+    if not os.path.exists(LOG_FOLDER):
+        os.mkdir(LOG_FOLDER)
+    t = time.strftime("%Y_%m_%d")
+    logger = logger
+    logger.add(f"{LOG_FOLDER}/fastapi_log_{t}.log", rotation="00:00", encoding="utf-8", retention="30 days")
+
 
 settings = Settings()

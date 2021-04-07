@@ -8,6 +8,7 @@ from sqlalchemy import func, or_
 from schema.role import PermList, PermBase
 from apis.login.controller import get_current_active_user
 from utils.Record import Record
+from core.config import settings
 from copy import deepcopy
 
 perm_router = APIRouter()
@@ -29,6 +30,7 @@ def check_perm(interface: str):
         if current_user.user_id in user_ids:
             return current_user
         else:
+            settings.logger.info(f"{current_user.username}没有分配{interface}权限")
             raise HTTPException(status_code=406, detail="没有权限")
 
     return check_user_permission

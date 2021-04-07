@@ -47,7 +47,7 @@ async def role_edit_user(role_users: RoleEditUsers, db: Session = Depends(get_db
     role = db.query(Role.role_id == role_id).first()
     if not role:
         raise HTTPException(status_code=406, detail="角色不存在")
-    # todo 此处是否要判断user_id是否正确？
+    # TODO 此处是否要判断user_id是否正确？
     # 处理关联表
     # 清除所有数据
     db.query(RoleUserRelation).filter(RoleUserRelation.role_id == role_id).delete()

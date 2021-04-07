@@ -12,3 +12,4 @@ paramiko
 openpyxl
 pandas
 bs4
+loguru

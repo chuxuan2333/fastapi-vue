@@ -9,6 +9,7 @@ from models.user.models import User
 from schema.menu import MenuBase
 from copy import deepcopy
 from utils.Record import Record
+from core.config import settings
 
 menu_router = APIRouter()
 
@@ -42,6 +43,7 @@ async def add_menu(menu: MenuBase, request: Request, db: Session = Depends(get_d
     db.add(new_menu)
     db.commit()
     Record.create_operate_record(username=current_user.username, new_object=new_record, ip=request.client.host)
+    settings.logger.info(f"新增菜单{menu.menu_name}")
     return {"message": "菜单新增成功"}
 
 

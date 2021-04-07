@@ -77,7 +77,6 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     """
     if not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail="用户未激活")
-    # Todo 判断用户是否有权限访问接口
     return current_user
 
 
@@ -88,12 +87,14 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     """
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
+        settings.logger.error("账号密码错误!!!")
         raise HTTPException(
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="帐号或密码错误",
             headers={"WWW-Authenticate": "Bearer"},
         )
     if not user.is_active:
+        settings.logger.error(f"{user.username}未激活")
         raise HTTPException(
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
             detail="用户未激活!!!",
