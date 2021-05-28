@@ -20,6 +20,7 @@ def authenticate_user(username: str, password: str):
     登陆认证
     """
     user = get_user(username)
+    # print(username, password)
     if not user:
         return None
     if not user.check_password(password):
