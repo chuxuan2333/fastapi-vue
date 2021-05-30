@@ -15,11 +15,11 @@ class Settings:
     # token过期时间
     ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60
     # 跨域白名单
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:9528"]
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:9528", "http://localhost:8000"]
     # db配置
     DB_URL = "mysql+pymysql://root:root@127.0.0.1:3306/fast"
     # 启动端口配置
-    PORT = 8000
+    PORT = 8999
     # 是否热加载
     RELOAD = True
     # 上传文件存储位置

@@ -5,7 +5,7 @@ from models.cmdb.models import CMDBType, CMDBItem, CMDBRecord
 from models.user.models import User
 from core.db import get_db
 from core.config import Settings
-from apis.perm.controller import check_perm
+from api.perm.controller import check_perm
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_, func
 from utils.Record import Record

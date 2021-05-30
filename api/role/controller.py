@@ -6,7 +6,7 @@ from models.role.models import Role, RoleUserRelation, PermRoleRelation, MenuRol
 from models.user.models import User
 from models.perm.models import Permission
 from models.menu.models import Menu
-from apis.perm.controller import check_perm
+from api.perm.controller import check_perm
 from utils.Record import Record
 from copy import deepcopy
 from schema.role import RoleList, RoleBase, RoleEditUsers, RoleUsers, RolePerms, RoleMenus, RoleEditPerms, RoleEditMenus

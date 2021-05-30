@@ -6,7 +6,7 @@ from core.db import get_db
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_
 from schema.role import PermList, PermBase
-from apis.login.controller import get_current_active_user
+from api.login.controller import get_current_active_user
 from utils.Record import Record
 from core.config import settings
 from copy import deepcopy

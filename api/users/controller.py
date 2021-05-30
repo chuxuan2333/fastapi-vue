@@ -4,8 +4,8 @@ from core.db import get_db
 from models.user.models import User
 from models.role.models import RoleUserRelation, MenuRoleRelation
 from models.menu.models import Menu
-from apis.perm.controller import check_perm
-from apis.login.controller import get_current_active_user
+from api.perm.controller import check_perm
+from api.login.controller import get_current_active_user
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, func
 from schema.user import UserBase, NewUser, AllUser, ModifyUser

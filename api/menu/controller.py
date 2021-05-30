@@ -4,7 +4,7 @@ from models.menu.models import Menu
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from core.db import get_db
-from apis.perm.controller import check_perm
+from api.perm.controller import check_perm
 from models.user.models import User
 from schema.menu import MenuBase
 from copy import deepcopy

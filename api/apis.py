@@ -1,11 +1,11 @@
 from fastapi import APIRouter
-from apis.login.controller import login_router
-from apis.users.controller import user_router
-from apis.record.controller import record_router
-from apis.role.controller import role_router
-from apis.menu.controller import menu_router
-from apis.perm.controller import perm_router
-from apis.cmdb.controller import cmdb_router
+from api.login.controller import login_router
+from api.users.controller import user_router
+from api.record.controller import record_router
+from api.role.controller import role_router
+from api.menu.controller import menu_router
+from api.perm.controller import perm_router
+from api.cmdb.controller import cmdb_router
 
 api_router = APIRouter()
 # router注册

@@ -20,7 +20,6 @@ def authenticate_user(username: str, password: str):
     登陆认证
     """
     user = get_user(username)
-    # print(username, password)
     if not user:
         return None
     if not user.check_password(password):
@@ -86,6 +85,8 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     """
     获取token
     """
+    print("Zhong test", form_data.username, form_data.password)
+
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
         settings.logger.error("账号密码错误!!!")
@@ -108,3 +109,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 @login_router.post("/logout", name="用户登出")
 def logout():
     return {"message": "已登出"}
+
+
+
+

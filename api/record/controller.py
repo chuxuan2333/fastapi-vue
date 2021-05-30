@@ -5,7 +5,7 @@ from sqlalchemy import func
 from models.record.models import OperateRecords
 from models.user.models import User
 from schema.record import Record, AllRecords
-from apis.perm.controller import check_perm
+from api.perm.controller import check_perm
 
 record_router = APIRouter()
 
