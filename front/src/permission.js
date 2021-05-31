@@ -6,13 +6,15 @@ import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+NProgress.configure({ showSpinner: false })  // NProgress Configuration
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/hello', '/login'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
+
+  console.log("TO:", to.path, "FROM:", from.path,"NEXT:", next.toString())
 
   // set page title
   document.title = getPageTitle(to.meta.title)
@@ -25,6 +27,10 @@ router.beforeEach(async(to, from, next) => {
       // if is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
+    } else if(to.path == '/hello'){
+      next({ path: '/hello/Mick' })
+      NProgress.done()
+
     } else {
       // 获取用户信息,菜单权限
       const hasMenu = store.getters.menus && store.getters.menus.length > 0

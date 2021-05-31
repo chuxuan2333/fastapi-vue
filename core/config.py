@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 from pydantic import AnyHttpUrl
 from typing import List
 from loguru import logger
@@ -15,7 +17,7 @@ class Settings:
     # token过期时间
     ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60
     # 跨域白名单
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:9528", "http://localhost:8000"]
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:9528", "http://localhost:8999"]
     # db配置
     DB_URL = "mysql+pymysql://root:root@127.0.0.1:3306/fast"
     # 启动端口配置

@@ -1,0 +1,2452 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "fastapi-vue-admin",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/login/": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "用户登陆",
+        "description": "获取token",
+        "operationId": "_____api_login__post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body______api_login__post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/logout": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "用户登出",
+        "operationId": "_____api_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "获取登陆用户详情",
+        "operationId": "_________api_users_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserBase"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/users/get_user_info": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "获取指定用户详情",
+        "operationId": "_________api_users_get_user_info_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Username",
+              "type": "string"
+            },
+            "name": "username",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserBase"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/users/all_users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "获取所有用户",
+        "operationId": "_______api_users_all_users_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Page No",
+              "type": "integer"
+            },
+            "name": "page_no",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Page Size",
+              "type": "integer"
+            },
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Search Username",
+              "type": "string",
+              "default": ""
+            },
+            "name": "search_username",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllUser"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/users/create_user": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "创建新用户",
+        "operationId": "______api_users_create_user_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "406": {
+            "description": "创建的用户已经存在"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/users/update_user": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "更新用户信息",
+        "description": "用户名不可以修改",
+        "operationId": "_______api_users_update_user_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/record/all_records": {
+      "get": {
+        "tags": [
+          "record"
+        ],
+        "summary": "获取所有数据操作记录",
+        "operationId": "___________api_record_all_records_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Page No",
+              "type": "integer"
+            },
+            "name": "page_no",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Page Size",
+              "type": "integer"
+            },
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Search Info",
+              "type": "string"
+            },
+            "name": "search_info",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllRecords"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/role/list": {
+      "get": {
+        "tags": [
+          "role"
+        ],
+        "summary": "角色列表",
+        "operationId": "_____api_role_list_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleList"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/role/add_role": {
+      "put": {
+        "tags": [
+          "role"
+        ],
+        "summary": "新增角色",
+        "operationId": "_____api_role_add_role_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/role/edit_users": {
+      "post": {
+        "tags": [
+          "role"
+        ],
+        "summary": "角色成员修改",
+        "operationId": "_______api_role_edit_users_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleEditUsers"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/role/edit_perms": {
+      "post": {
+        "tags": [
+          "role"
+        ],
+        "summary": "角色权限修改",
+        "operationId": "_______api_role_edit_perms_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleEditPerms"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/role/edit_menus": {
+      "post": {
+        "tags": [
+          "role"
+        ],
+        "summary": "角色菜单修改",
+        "operationId": "_______api_role_edit_menus_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleEditMenus"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/role/user_lists": {
+      "get": {
+        "tags": [
+          "role"
+        ],
+        "summary": "角色下所有成员",
+        "operationId": "________api_role_user_lists_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Role Id",
+              "type": "string"
+            },
+            "name": "role_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleUsers"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/role/perm_lists": {
+      "get": {
+        "tags": [
+          "role"
+        ],
+        "summary": "角色下所有权限",
+        "operationId": "________api_role_perm_lists_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Role Id",
+              "type": "string"
+            },
+            "name": "role_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RolePerms"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/role/menu_lists": {
+      "get": {
+        "tags": [
+          "role"
+        ],
+        "summary": "角色拥有的菜单",
+        "operationId": "________api_role_menu_lists_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Role Id",
+              "type": "string"
+            },
+            "name": "role_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleMenus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/menu/menu_lists": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "菜单列表",
+        "operationId": "_____api_menu_menu_lists_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/menu/add_menu": {
+      "put": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "新增菜单",
+        "operationId": "_____api_menu_add_menu_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MenuBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/menu/edit_menu": {
+      "post": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "修改菜单",
+        "operationId": "_____api_menu_edit_menu_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MenuBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/menu/get_menu_info": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "获取菜单详细信息",
+        "operationId": "_________api_menu_get_menu_info_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Menu Id",
+              "type": "string"
+            },
+            "name": "menu_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/perm/perm_lists": {
+      "get": {
+        "tags": [
+          "perm"
+        ],
+        "summary": "权限列表",
+        "operationId": "_____api_perm_perm_lists_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Page No",
+              "type": "integer"
+            },
+            "name": "page_no",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Page Size",
+              "type": "integer"
+            },
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Search Perm",
+              "type": "string",
+              "default": ""
+            },
+            "name": "search_perm",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/perm/add_perm": {
+      "put": {
+        "tags": [
+          "perm"
+        ],
+        "summary": "新增权限",
+        "operationId": "_____api_perm_add_perm_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PermBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/perm/edit_perm/{perm_id}": {
+      "post": {
+        "tags": [
+          "perm"
+        ],
+        "summary": "修改权限",
+        "operationId": "_____api_perm_edit_perm__perm_id__post",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Perm Id",
+              "type": "string"
+            },
+            "name": "perm_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PermBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/type_list": {
+      "get": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "获取Cmdb中所有对象类型",
+        "operationId": "__CMDB________api_cmdb_type_list_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CMDBTypeList"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/add_type": {
+      "put": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "新增Cmdb对象类型",
+        "operationId": "__CMDB_____api_cmdb_add_type_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CMDBBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/type_info": {
+      "get": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "获取Cmdb对象属性",
+        "operationId": "__CMDB_____api_cmdb_type_info_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Type Id",
+              "type": "string"
+            },
+            "name": "type_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/edit_type": {
+      "post": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "修改Cmdb对象类型",
+        "operationId": "__CMDB_____api_cmdb_edit_type_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CMDBBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/get_type_items": {
+      "get": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "获取类型下所有的属性",
+        "operationId": "___________api_cmdb_get_type_items_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Type Id",
+              "type": "string"
+            },
+            "name": "type_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/add_type_item": {
+      "put": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "新增类型属性",
+        "operationId": "_______api_cmdb_add_type_item_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CMDBItemBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/item_info": {
+      "get": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "获取类型属性详情",
+        "operationId": "_________api_cmdb_item_info_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Item Id",
+              "type": "string"
+            },
+            "name": "item_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/edit_type_item": {
+      "post": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "修改类型属性",
+        "operationId": "_______api_cmdb_edit_type_item_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CMDBItemBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/instance_lists": {
+      "get": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "模型下实例列表",
+        "operationId": "________api_cmdb_instance_lists_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Type Id",
+              "type": "string"
+            },
+            "name": "type_id",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Page No",
+              "type": "integer"
+            },
+            "name": "page_no",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Page Size",
+              "type": "integer"
+            },
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Search Str",
+              "type": "string",
+              "default": ""
+            },
+            "name": "search_str",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/add_record": {
+      "put": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "新增记录",
+        "operationId": "_____api_cmdb_add_record_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "New Record",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/create_cmdb_template/{type_id}": {
+      "get": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "下载Cmdb模板",
+        "operationId": "__cmdb___api_cmdb_create_cmdb_template__type_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Type Id",
+              "type": "string"
+            },
+            "name": "type_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/import_record/{type_id}": {
+      "post": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "导入记录",
+        "operationId": "_____api_cmdb_import_record__type_id__post",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Type Id",
+              "type": "string"
+            },
+            "name": "type_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body______api_cmdb_import_record__type_id__post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/edit_record": {
+      "post": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "修改记录",
+        "operationId": "_____api_cmdb_edit_record_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Edit Record",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/delete_record": {
+      "delete": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "删除记录",
+        "operationId": "_____api_cmdb_delete_record_delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Record Id",
+              "type": "string"
+            },
+            "name": "record_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/cmdb/record_details/{record_id}": {
+      "get": {
+        "tags": [
+          "cmdb"
+        ],
+        "summary": "获取记录详情",
+        "operationId": "_______api_cmdb_record_details__record_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Record Id",
+              "type": "string"
+            },
+            "name": "record_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/hello/{name}": {
+      "get": {
+        "tags": [
+          "nologin"
+        ],
+        "summary": "Hello",
+        "operationId": "hello_api_hello__name__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AllRecords": {
+        "title": "AllRecords",
+        "required": [
+          "total",
+          "records"
+        ],
+        "type": "object",
+        "properties": {
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          },
+          "records": {
+            "title": "Records",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Record"
+            }
+          }
+        },
+        "description": "所有操作记录schema",
+        "example": {
+          "total": 50,
+          "records": [
+            {
+              "operate_object": "User",
+              "operate_type": "修改",
+              "operate_detail": "[{\"name\": \"nick_name\", \"old\": \"admin1\", \"new\": \"admin\"}]",
+              "operate_ip": "127.0.0.1",
+              "operate_username": "admin"
+            }
+          ]
+        }
+      },
+      "AllUser": {
+        "title": "AllUser",
+        "required": [
+          "total"
+        ],
+        "type": "object",
+        "properties": {
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          },
+          "users": {
+            "title": "Users",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserBase"
+            },
+            "default": []
+          }
+        },
+        "description": "所有用户schema",
+        "example": {
+          "total": 50,
+          "users": [
+            {
+              "username": "huangtao",
+              "email": "huangtao123689@gmail.com",
+              "is_active": true,
+              "nick_name": "mark"
+            },
+            {
+              "username": "huangtao1",
+              "email": "huangtao1@gmail.com",
+              "is_active": true,
+              "nick_name": "huangtao1"
+            }
+          ]
+        }
+      },
+      "Body______api_cmdb_import_record__type_id__post": {
+        "title": "Body______api_cmdb_import_record__type_id__post",
+        "required": [
+          "file"
+        ],
+        "type": "object",
+        "properties": {
+          "file": {
+            "title": "File",
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "Body______api_login__post": {
+        "title": "Body______api_login__post",
+        "required": [
+          "username",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "title": "Grant Type",
+            "pattern": "password",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          },
+          "scope": {
+            "title": "Scope",
+            "type": "string",
+            "default": ""
+          },
+          "client_id": {
+            "title": "Client Id",
+            "type": "string"
+          },
+          "client_secret": {
+            "title": "Client Secret",
+            "type": "string"
+          }
+        }
+      },
+      "CMDBBase": {
+        "title": "CMDBBase",
+        "required": [
+          "type_name",
+          "type_label",
+          "type_icon"
+        ],
+        "type": "object",
+        "properties": {
+          "type_id": {
+            "title": "Type Id",
+            "type": "string"
+          },
+          "type_name": {
+            "title": "Type Name",
+            "type": "string"
+          },
+          "type_label": {
+            "title": "Type Label",
+            "type": "string"
+          },
+          "type_icon": {
+            "title": "Type Icon",
+            "type": "string"
+          }
+        }
+      },
+      "CMDBItemBase": {
+        "title": "CMDBItemBase",
+        "required": [
+          "item_label",
+          "item_name"
+        ],
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "title": "Item Id",
+            "type": "string"
+          },
+          "cmdb_type_id": {
+            "title": "Cmdb Type Id",
+            "type": "string"
+          },
+          "item_label": {
+            "title": "Item Label",
+            "type": "string"
+          },
+          "item_name": {
+            "title": "Item Name",
+            "type": "string"
+          }
+        }
+      },
+      "CMDBTypeList": {
+        "title": "CMDBTypeList",
+        "required": [
+          "types"
+        ],
+        "type": "object",
+        "properties": {
+          "types": {
+            "title": "Types",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CMDBBase"
+            }
+          }
+        }
+      },
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "MenuBase": {
+        "title": "MenuBase",
+        "required": [
+          "menu_name",
+          "menu_flag"
+        ],
+        "type": "object",
+        "properties": {
+          "menu_name": {
+            "title": "Menu Name",
+            "type": "string"
+          },
+          "menu_flag": {
+            "title": "Menu Flag",
+            "type": "string"
+          },
+          "parent_id": {
+            "title": "Parent Id",
+            "type": "string",
+            "default": "0"
+          },
+          "menu_id": {
+            "title": "Menu Id",
+            "type": "string"
+          }
+        }
+      },
+      "ModifyUser": {
+        "title": "ModifyUser",
+        "required": [
+          "email",
+          "nick_name"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string",
+            "format": "email"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean",
+            "default": true
+          },
+          "nick_name": {
+            "title": "Nick Name",
+            "type": "string"
+          }
+        },
+        "description": "修改用户schema"
+      },
+      "NewUser": {
+        "title": "NewUser",
+        "required": [
+          "username",
+          "email",
+          "nick_name",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string",
+            "format": "email"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean",
+            "default": true
+          },
+          "nick_name": {
+            "title": "Nick Name",
+            "type": "string"
+          },
+          "avatar": {
+            "title": "Avatar",
+            "type": "string",
+            "default": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"
+          },
+          "menus": {
+            "title": "Menus",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "description": "新建用户schema",
+        "example": {
+          "username": "huangtao",
+          "email": "huangtao123689@gmail.com",
+          "is_active": true,
+          "nick_name": "huangtao",
+          "password": "123456"
+        }
+      },
+      "PermBase": {
+        "title": "PermBase",
+        "required": [
+          "perm_name",
+          "perm_interface"
+        ],
+        "type": "object",
+        "properties": {
+          "perm_id": {
+            "title": "Perm Id",
+            "type": "string"
+          },
+          "perm_name": {
+            "title": "Perm Name",
+            "type": "string"
+          },
+          "perm_interface": {
+            "title": "Perm Interface",
+            "type": "string"
+          }
+        }
+      },
+      "PermList": {
+        "title": "PermList",
+        "required": [
+          "total",
+          "perms"
+        ],
+        "type": "object",
+        "properties": {
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          },
+          "perms": {
+            "title": "Perms",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PermBase"
+            }
+          }
+        }
+      },
+      "Record": {
+        "title": "Record",
+        "required": [
+          "operate_object",
+          "operate_type",
+          "operate_detail",
+          "operate_ip",
+          "operate_username",
+          "operate_time"
+        ],
+        "type": "object",
+        "properties": {
+          "operate_object": {
+            "title": "Operate Object",
+            "type": "string"
+          },
+          "operate_type": {
+            "title": "Operate Type",
+            "type": "string"
+          },
+          "operate_detail": {
+            "title": "Operate Detail",
+            "type": "string"
+          },
+          "operate_ip": {
+            "title": "Operate Ip",
+            "type": "string"
+          },
+          "operate_username": {
+            "title": "Operate Username",
+            "type": "string"
+          },
+          "operate_time": {
+            "title": "Operate Time",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "单条记录schema"
+      },
+      "RoleBase": {
+        "title": "RoleBase",
+        "required": [
+          "role_name",
+          "role_desc"
+        ],
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "title": "Role Id",
+            "type": "string"
+          },
+          "role_name": {
+            "title": "Role Name",
+            "type": "string"
+          },
+          "role_desc": {
+            "title": "Role Desc",
+            "type": "string"
+          },
+          "user_count": {
+            "title": "User Count",
+            "type": "integer"
+          }
+        }
+      },
+      "RoleEditBase": {
+        "title": "RoleEditBase",
+        "required": [
+          "key",
+          "label"
+        ],
+        "type": "object",
+        "properties": {
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          }
+        }
+      },
+      "RoleEditMenus": {
+        "title": "RoleEditMenus",
+        "required": [
+          "role_id",
+          "menus"
+        ],
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "title": "Role Id",
+            "type": "string"
+          },
+          "menus": {
+            "title": "Menus",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RoleEditPerms": {
+        "title": "RoleEditPerms",
+        "required": [
+          "role_id",
+          "perms"
+        ],
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "title": "Role Id",
+            "type": "string"
+          },
+          "perms": {
+            "title": "Perms",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RoleEditUsers": {
+        "title": "RoleEditUsers",
+        "required": [
+          "role_id",
+          "users"
+        ],
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "title": "Role Id",
+            "type": "string"
+          },
+          "users": {
+            "title": "Users",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RoleList": {
+        "title": "RoleList",
+        "type": "object",
+        "properties": {
+          "roles": {
+            "title": "Roles",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleBase"
+            },
+            "default": []
+          }
+        }
+      },
+      "RoleMenus": {
+        "title": "RoleMenus",
+        "required": [
+          "menus",
+          "choose_menus"
+        ],
+        "type": "object",
+        "properties": {
+          "menus": {
+            "title": "Menus",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleEditBase"
+            }
+          },
+          "choose_menus": {
+            "title": "Choose Menus",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RolePerms": {
+        "title": "RolePerms",
+        "required": [
+          "perms",
+          "choose_perms"
+        ],
+        "type": "object",
+        "properties": {
+          "perms": {
+            "title": "Perms",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleEditBase"
+            }
+          },
+          "choose_perms": {
+            "title": "Choose Perms",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RoleUsers": {
+        "title": "RoleUsers",
+        "required": [
+          "users",
+          "choose_users"
+        ],
+        "type": "object",
+        "properties": {
+          "users": {
+            "title": "Users",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleEditBase"
+            }
+          },
+          "choose_users": {
+            "title": "Choose Users",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Token": {
+        "title": "Token",
+        "required": [
+          "access_token",
+          "token_type"
+        ],
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "title": "Access Token",
+            "type": "string"
+          },
+          "token_type": {
+            "title": "Token Type",
+            "type": "string"
+          }
+        },
+        "description": "token schema"
+      },
+      "UserBase": {
+        "title": "UserBase",
+        "required": [
+          "username",
+          "email",
+          "nick_name"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string",
+            "format": "email"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean",
+            "default": true
+          },
+          "nick_name": {
+            "title": "Nick Name",
+            "type": "string"
+          },
+          "avatar": {
+            "title": "Avatar",
+            "type": "string",
+            "default": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"
+          },
+          "menus": {
+            "title": "Menus",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        "description": "User schema基础格式",
+        "example": {
+          "username": "huangtao",
+          "email": "huangtao123689@gmail.com",
+          "is_active": true,
+          "nick_name": "huangtao",
+          "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"
+        }
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "OAuth2PasswordBearer": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "scopes": {},
+            "tokenUrl": "/api/login/"
+          }
+        }
+      }
+    }
+  }
+}
